@@ -1,9 +1,3 @@
-/*
- * SwitchboardView.java
- *
- * Created on August 14, 2006, 11:45 PM
- */
-
 package com.floreantpos.ui.views;
 
 
@@ -111,7 +105,7 @@ public class SwitchboardView extends JPanel implements ActionListener {
 
 		setLayout(new java.awt.BorderLayout());
 
-		statusPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "CURRENT USER STATUS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+		statusPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "ESTADO ACTUAL DEL USUARIO", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 		statusPanel.setPreferredSize(new java.awt.Dimension(100, 80));
 		statusPanel.setLayout(new java.awt.BorderLayout());
 
@@ -191,7 +185,7 @@ public class SwitchboardView extends JPanel implements ActionListener {
 
 		bottomPanel.add(bottomLeftPanel, java.awt.BorderLayout.CENTER);
 
-		bottomRightPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "OTHERS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+		bottomRightPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "OTROS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 		bottomRightPanel.setPreferredSize(new java.awt.Dimension(200, 10));
 
 		btnShutdown.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/shut_down_32.png")));
@@ -668,7 +662,7 @@ public class SwitchboardView extends JPanel implements ActionListener {
 		}
 		openTicketList.setTickets(openTickets);
 
-		lblUserName.setText(POSConstants.WELCOME + " " + user.toString() + ". " + POSConstants.YOU + " " + POSConstants.HAVE + " " + openTickets.size() + " " + POSConstants.OPEN.toLowerCase() + " " + POSConstants.TICKETS);
+		lblUserName.setText(POSConstants.WELCOME + " " + user.toString() + ". " + POSConstants.YOU + " " + POSConstants.HAVE + " " + openTickets.size() + " " + POSConstants.OPEN_ACCOUNTS);
 	}
 
 	// Variables declaration - do not modify//GEN-BEGIN:variables

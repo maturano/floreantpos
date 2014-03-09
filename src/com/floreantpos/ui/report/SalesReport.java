@@ -47,9 +47,9 @@ public class SalesReport extends Report {
 
 		HashMap map = new HashMap();
 		ReportUtil.populateRestaurantProperties(map);
-		map.put("reportTitle", "================================= Sales Report ================================");
+        map.put("reportTitle", "=================== Reporte de Ventas ===================");
 		map.put("reportTime", ReportService.formatFullDate(new Date()));
-		map.put("dateRange", ReportService.formatShortDate(getStartDate()) + " to " + ReportService.formatShortDate(getEndDate()));
+        map.put("dateRange", ReportService.formatShortDate(getStartDate()) + " al " + ReportService.formatShortDate(getEndDate()));
 		map.put("terminalName", com.floreantpos.POSConstants.ALL);
 		map.put("itemDataSource", new JRTableModelDataSource(itemReportModel));
 		map.put("modifierDataSource", new JRTableModelDataSource(modifierReportModel));

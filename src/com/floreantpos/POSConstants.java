@@ -31,6 +31,7 @@ public class POSConstants {
 	public static final String DRAWER_PULL = Messages.getString("PosMessage.28"); //$NON-NLS-1$
 	public static final String CLEAR = Messages.getString("PosMessage.29"); //$NON-NLS-1$
 	public static final String NO_SHIFT_CONFIGURED = Messages.getString("PosMessage.30"); //$NON-NLS-1$
+    public static final String CLOCKED_OUT_PREV_SHIFT = Messages.getString("PosMessage.312");
 	public static final String SHIFTS = Messages.getString("PosMessage.31"); //$NON-NLS-1$
 	public static final String CONFIRM_SET_TAX_EXEMPT = Messages.getString("PosMessage.32"); //$NON-NLS-1$
 	public static final String ITEMS_WASTED = Messages.getString("PosMessage.33"); //$NON-NLS-1$
@@ -315,6 +316,7 @@ public class POSConstants {
 	public static final String TICKETS = Messages.getString("Switchboard.2"); //$NON-NLS-1$
 	public static final String HAVE = Messages.getString("Switchboard.3"); //$NON-NLS-1$
 	public static final String YOU = Messages.getString("Switchboard.4"); //$NON-NLS-1$
+    public static final String OPEN_ACCOUNTS = Messages.getString("Switchboard.37"); //$NON-NLS-1$
 	public static final String YOU_MUST_SELECT_TWO_OR_MORE_TICKET_FOR_GROUP_SETTLE = Messages.getString("Switchboard.5"); //$NON-NLS-1$
 	public static final String SELECT_A_TICKET_FROM_THE_OPEN_TICKET_LIST = Messages.getString("Switchboard.6"); //$NON-NLS-1$
 	public static final String ENTER_NUMBER_OF_GUEST = Messages.getString("Switchboard.7"); //$NON-NLS-1$

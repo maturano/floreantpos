@@ -1,9 +1,3 @@
-/*
- * CardView.java
- *
- * Created on August 25, 2006, 1:39 PM
- */
-
 package com.floreantpos.ui.views;
 
 import java.text.NumberFormat;
@@ -148,7 +142,7 @@ public class CardPaymentView extends PaymentView {
 		transparentPanel5.setLayout(new java.awt.GridLayout(1, 0, 5, 5));
 
 		transparentPanel5.setPreferredSize(new java.awt.Dimension(100, 60));
-		btnChangePMethod.setText("<html><body><p align='center'>CHANGE PAYMENT METHOD</p></body></html>");
+        btnChangePMethod.setText("<html><body><p align='center'>CAMBIA METODO DE PAGO</p></body></html>");
 		btnChangePMethod.setFocusable(false);
 		btnChangePMethod.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -307,7 +301,7 @@ public class CardPaymentView extends PaymentView {
 		transparentPanel1.setLayout(new java.awt.BorderLayout(5, 5));
 
 		transparentPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-		jLabel1.setText("Gratuity Amount");
+		jLabel1.setText("Monto de Propina");
 		transparentPanel1.add(jLabel1, java.awt.BorderLayout.NORTH);
 
 		tfGratuityAmount.setFont(new java.awt.Font("Tahoma", 1, 12));
@@ -322,7 +316,7 @@ public class CardPaymentView extends PaymentView {
 		transparentPanel4.setLayout(new java.awt.BorderLayout(5, 5));
 
 		transparentPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-		jLabel3.setText("Authorization Code");
+		jLabel3.setText("Código de autorización");
 		transparentPanel4.add(jLabel3, java.awt.BorderLayout.NORTH);
 
 		tfAuthorizationCode.setFont(new java.awt.Font("Tahoma", 1, 12));
@@ -337,7 +331,7 @@ public class CardPaymentView extends PaymentView {
 		transparentPanel2.setLayout(new java.awt.BorderLayout(5, 5));
 
 		transparentPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
-		jLabel2.setText("Amount Charged to Card");
+		jLabel2.setText("Cantidad de cargo a la tarjeta");
 		transparentPanel2.add(jLabel2, java.awt.BorderLayout.NORTH);
 
 		tfCardAmount.setFont(new java.awt.Font("Tahoma", 1, 12));
@@ -530,14 +524,14 @@ public class CardPaymentView extends PaymentView {
 		if (cardType == CARD_TYPE_DEBIT) {
 			btnEmEx.setVisible(false);
 			btnDiscover.setVisible(false);
-			TitledBorder titledBorder = new TitledBorder("Debit Card Transaction");
+			TitledBorder titledBorder = new TitledBorder("Pago con Tarjeta de Débito");
 			titledBorder.setTitleJustification(TitledBorder.CENTER);
 			setBorder(titledBorder);
 		}
 		else {
 			btnEmEx.setVisible(true);
 			btnDiscover.setVisible(true);
-			TitledBorder titledBorder = new TitledBorder("Credit Card Transaction");
+			TitledBorder titledBorder = new TitledBorder("Pago con Tarjeta de Crédito");
 			titledBorder.setTitleJustification(TitledBorder.CENTER);
 			setBorder(titledBorder);
 		}
