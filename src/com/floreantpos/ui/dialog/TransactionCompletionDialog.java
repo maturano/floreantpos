@@ -23,62 +23,62 @@ public class TransactionCompletionDialog extends POSDialog {
 	private double dueAmount;
 	private double dueAmountBeforePaid;
 	private double gratuityAmount;
-	
+
 	private JLabel lblTenderedAmount;
 	private JLabel lblTotalAmount;
 	private JLabel lblPaidAmount;
 	private JLabel lblDueAmount;
 	private JLabel lblChangeDue;
 	private JLabel lblGratuityAmount;
-	
+
 	private TransactionCompletionDialog(Frame parent) {
 		super(parent, true);
-		
+
 		setTitle(com.floreantpos.POSConstants.TRANSACTION_COMPLETED);
-		
+
 		setLayout(new MigLayout("align 50% 0%, ins 20","[]20[]",""));
-		
-		add(createLabel("TOTAL AMOUNT" + ":",JLabel.LEFT), "grow");
+
+		add(createLabel("MONTO TOTAL" + ":",JLabel.LEFT), "grow");
 		lblTotalAmount = createLabel("0.0",JLabel.RIGHT);
 		add(lblTotalAmount, "grow");
-		
-		add(createLabel("TENDERED AMOUNT" + ":",JLabel.LEFT), "newline,grow");
+
+		add(createLabel("IMPORTE RECIBIDO" + ":",JLabel.LEFT), "newline,grow");
 		lblTenderedAmount = createLabel("0.0",JLabel.RIGHT);
 		add(lblTenderedAmount, "grow");
-		
+
 		add(new JSeparator(), "newline,span, grow");
-		
-		add(createLabel("PAID AMOUNT" + ":",JLabel.LEFT), "newline,grow");
+
+		add(createLabel("MONTO PAGADO" + ":",JLabel.LEFT), "newline,grow");
 		lblPaidAmount = createLabel("0.0",JLabel.RIGHT);
 		add(lblPaidAmount, "grow");
 
-		add(createLabel("DUE AMOUNT" + ":",JLabel.LEFT), "newline,grow");
+		add(createLabel("CANTIDAD DEBIDA" + ":",JLabel.LEFT), "newline,grow");
 		lblDueAmount = createLabel("0.0",JLabel.RIGHT);
 		add(lblDueAmount, "grow");
-		
+
 		add(new JSeparator(), "newline,span, grow");
-		
-		add(createLabel("GRATUITY AMOUNT" + ":",JLabel.LEFT), "newline,grow");
+
+		add(createLabel("PROPINA" + ":",JLabel.LEFT), "newline,grow");
 		lblGratuityAmount = createLabel("0.0",JLabel.RIGHT);
 		add(lblGratuityAmount, "grow");
-		
+
 		add(new JSeparator(), "newline,span, grow");
-		
-		add(createLabel("CHANGE DUE" + ":",JLabel.LEFT), "grow");
+
+		add(createLabel("CAMBIO" + ":",JLabel.LEFT), "grow");
 		lblChangeDue = createLabel("0.0", JLabel.RIGHT);
 		add(lblChangeDue, "grow");
-		
+
 		add(new JSeparator(), "sg mygroup,newline,span,grow");
-		PosButton btnClose = new PosButton("CLOSE");
+		PosButton btnClose = new PosButton("CERRAR");
 		btnClose.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 			}
-			
+
 		});
 
-		PosButton btnPrintClose = new PosButton("PRINT & CLOSE");
+		PosButton btnPrintClose = new PosButton("IMPRIMIR Y CERRAR");
 		btnPrintClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -92,12 +92,12 @@ public class TransactionCompletionDialog extends POSDialog {
 				dispose();
 			}
 		});
-		
+
 		add(btnPrintClose, "newline,skip, align 100%,h 50, w 120");
 		add(btnClose, "skip, align 100%,h 50, w 120");
 		setResizable(false);
 	}
-	
+
 	protected JLabel createLabel(String text, int alignment) {
 		JLabel label = new JLabel(text);
 		label.setFont(new java.awt.Font("Tahoma", 1, 36));
@@ -121,16 +121,16 @@ public class TransactionCompletionDialog extends POSDialog {
 		lblPaidAmount.setText(Application.formatNumber(paidAmount));
 		lblDueAmount.setText(Application.formatNumber(dueAmount));
 		lblGratuityAmount.setText(Application.formatNumber(gratuityAmount));
-		
+
 		double changeDueAmount = tenderedAmount - dueAmountBeforePaid;
 		if(changeDueAmount < 0) {
 			changeDueAmount = 0;
 		}
 		lblChangeDue.setText(Application.formatNumber(changeDueAmount));
 	}
-	
+
 	private static TransactionCompletionDialog instance;
-	
+
 	public static TransactionCompletionDialog getInstance() {
 		if(instance == null) {
 			instance = new TransactionCompletionDialog(Application.getPosWindow());

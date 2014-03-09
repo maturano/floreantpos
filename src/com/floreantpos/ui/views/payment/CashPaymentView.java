@@ -75,7 +75,7 @@ public class CashPaymentView extends PaymentView {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18));
         jLabel1.setForeground(new java.awt.Color(204, 102, 0));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("AMOUNT TENDERED");
+        jLabel1.setText("CANTIDAD RECIBIDA");
         jPanel1.add(jLabel1, java.awt.BorderLayout.NORTH);
 
         tfAmountTendered.setBackground(java.awt.Color.white);
@@ -159,7 +159,7 @@ public class CashPaymentView extends PaymentView {
 
         posButton12.setAction(calAction);
         posButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/clear_32.png")));
-        posButton12.setText("CLEAR");
+        posButton12.setText("LIMPIA");
         posButton12.setFocusable(false);
         calcButtonPanel.add(posButton12);
 
@@ -171,7 +171,7 @@ public class CashPaymentView extends PaymentView {
         jPanel3.setPreferredSize(new java.awt.Dimension(100, 130));
         jPanel4.setLayout(new java.awt.GridLayout(1, 0, 5, 5));
 
-        btnChangePayment.setText("<html><body><p align='center'>CHANGE PAYMENT METHOD</p></body></html>");
+        btnChangePayment.setText("<html><body><p align='center'>CAMBIA METODO DE PAGO</p></body></html>");
         btnChangePayment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnChangePaymentActionPerformed(evt);
@@ -180,7 +180,7 @@ public class CashPaymentView extends PaymentView {
 
         jPanel4.add(btnChangePayment);
 
-        btnExactChange.setText("EXACT CHANGE");
+        btnExactChange.setText("<html><body><p align=\"center\">CANTIDAD EXACTA</p></body></html>");
         btnExactChange.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnExactChangeActionPerformed(evt);
@@ -189,7 +189,7 @@ public class CashPaymentView extends PaymentView {
 
         jPanel4.add(btnExactChange);
 
-        btnNextAmount.setText("NEXT AMT");
+        btnNextAmount.setText("<html><body><p align=\"center\">CARGO SIGUIENTE</p></body></html>");
         btnNextAmount.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNextAmountActionPerformed(evt);
@@ -203,7 +203,7 @@ public class CashPaymentView extends PaymentView {
         jPanel5.setLayout(new java.awt.GridLayout(1, 0, 5, 5));
 
         btnFinish.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/finish_32.png")));
-        btnFinish.setText("FINISH");
+        btnFinish.setText("FINALIZAR");
         btnFinish.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 doFinish(evt);
@@ -213,7 +213,7 @@ public class CashPaymentView extends PaymentView {
         jPanel5.add(btnFinish);
 
         btnCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cancel_32.png")));
-        btnCancel.setText("CANCEL");
+        btnCancel.setText("CANCELAR");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
@@ -300,9 +300,9 @@ public class CashPaymentView extends PaymentView {
 		public void actionPerformed(ActionEvent e) {
 			PosButton button = (PosButton) e.getSource();
 			String s = button.getActionCommand();
-			if (s.equals("CLEAR")) {
-				tfAmountTendered.setText("0");
-			}
+            if (s.equals("LIMPIA")) {
+                tfAmountTendered.setText("0");
+            }
 			else if (s.equals(".")) {
 				if (tfAmountTendered.getText().indexOf('.') < 0) {
 					tfAmountTendered.setText(tfAmountTendered.getText() + ".");

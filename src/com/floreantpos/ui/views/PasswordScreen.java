@@ -271,13 +271,13 @@ public class PasswordScreen extends JPanel {
 		try {
 
 			User user = null;
-			
+
 			user = dao.findUser(userId, selectedUserType);
 			if(user == null) {
 				MessageDialog.showError(com.floreantpos.POSConstants.USER_NOT_FOUND);
 				return;
 			}
-			
+
 			if (user.getNewUserType() != null) {
 				if (user == null) {
 					MessageDialog.showError(com.floreantpos.POSConstants.USER_NOT_FOUND);
@@ -308,7 +308,7 @@ public class PasswordScreen extends JPanel {
 					MessageDialog.showError(com.floreantpos.POSConstants.WRONG_PASSWORD);
 					return;
 				}
-				
+
 			}
 
 			Shift currentShift = ShiftUtil.getCurrentShift();
@@ -350,7 +350,7 @@ public class PasswordScreen extends JPanel {
 	}
 
 	private void reClockInUser(Calendar currentTime, User user, Shift currentShift) {
-		POSMessageDialog.showMessage("You will be clocked out from previous Shift");
+        POSMessageDialog.showMessage(com.floreantpos.POSConstants.CLOCKED_OUT_PREV_SHIFT);
 
 		Application application = Application.getInstance();
 		AttendenceHistoryDAO attendenceHistoryDAO = new AttendenceHistoryDAO();

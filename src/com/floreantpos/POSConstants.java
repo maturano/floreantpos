@@ -31,6 +31,7 @@ public class POSConstants {
 	public static final String DRAWER_PULL = Messages.getString("PosMessage.28"); //$NON-NLS-1$
 	public static final String CLEAR = Messages.getString("PosMessage.29"); //$NON-NLS-1$
 	public static final String NO_SHIFT_CONFIGURED = Messages.getString("PosMessage.30"); //$NON-NLS-1$
+    public static final String CLOCKED_OUT_PREV_SHIFT = Messages.getString("PosMessage.312");
 	public static final String SHIFTS = Messages.getString("PosMessage.31"); //$NON-NLS-1$
 	public static final String CONFIRM_SET_TAX_EXEMPT = Messages.getString("PosMessage.32"); //$NON-NLS-1$
 	public static final String ITEMS_WASTED = Messages.getString("PosMessage.33"); //$NON-NLS-1$
