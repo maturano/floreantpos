@@ -104,10 +104,12 @@ public class TicketItem extends BaseTicketItem {
 		double subtotalItemPrice = calculateSubtotal(false) - calculateDiscount();
 
 		double taxRate = getTaxRate();
-		double tax = 0;
+        double tax = 0;
+        double stTmp = subtotalItemPrice;
 
-		if (taxRate > 0) {
-			tax = subtotalItemPrice * taxRate / 100.0;
+        if (taxRate > 0) {
+            subtotalItemPrice = (100 * subtotalItemPrice) / (100 + taxRate);
+            tax = stTmp - subtotalItemPrice;
 		}
 		setTaxAmountWithoutModifiers(tax);
 

@@ -156,20 +156,21 @@ public class Ticket extends BaseTicket {
 		for (TicketItem ticketItem : ticketItems) {
 			tax += ticketItem.calculateTax(true);
 		}
-		
+
 		double subtotalAfterDiscount = subtotalAmount - discountAmount;
 
-		tax = (subtotalAfterDiscount * tax) / subtotalAmount; 
-		
+        tax = (subtotalAfterDiscount * tax) / subtotalAmount;
+
 		return tax;
 	}
 
 	public void calculatePrice() {
-		double subtotalAmount = calculateSubtotalAmount();
-		double discountAmount = calculateDiscountAmount();
-		double taxAmount = calculateTax(subtotalAmount, discountAmount);
-		double totalAmount = subtotalAmount - discountAmount + taxAmount;
-		
+        double subtotalAmount = calculateSubtotalAmount();
+        double discountAmount = calculateDiscountAmount();
+        double taxAmount      = calculateTax(subtotalAmount, discountAmount);
+        subtotalAmount        = subtotalAmount - taxAmount;
+        double totalAmount    = subtotalAmount - discountAmount + taxAmount;
+
 		if(subtotalAmount < 0 || Double.isNaN(subtotalAmount)) {
 			subtotalAmount = 0;
 		}
@@ -182,8 +183,7 @@ public class Ticket extends BaseTicket {
 		if(totalAmount < 0 || Double.isNaN(totalAmount)) {
 			totalAmount = 0;
 		}
-		
-		
+
 		setSubtotalAmount(subtotalAmount);
 		setDiscountAmount(discountAmount);
 
