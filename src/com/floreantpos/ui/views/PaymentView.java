@@ -131,14 +131,6 @@ public abstract class PaymentView extends JPanel {
 			PosTransactionService service = PosTransactionService.getInstance();
 			service.settleTickets(ticketsToSettle, tenderedAmount, gratuityAmount, posTransaction, cardType, cardAuthorizationCode);
 
-			try {
-				for (Ticket ticket : ticketsToSettle) {
-					PosPrintService.printTicket(ticket);
-				}
-			}catch(Exception ee) {
-				POSMessageDialog.showError(Application.getPosWindow(), com.floreantpos.POSConstants.PRINT_ERROR, ee);
-			}
-			
 			/*if(Application.getPrinterConfiguration().isPrintReceiptWhenTicketPaid()) {
 				try {
 					for (Ticket ticket : ticketsToSettle) {
