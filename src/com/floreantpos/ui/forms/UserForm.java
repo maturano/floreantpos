@@ -7,6 +7,7 @@
 package com.floreantpos.ui.forms;
 
 import java.util.List;
+import java.text.NumberFormat;
 
 import javax.swing.DefaultComboBoxModel;
 
@@ -21,7 +22,7 @@ import com.floreantpos.ui.dialog.POSMessageDialog;
 import com.floreantpos.util.POSUtil;
 
 /**
- * 
+ *
  * @author rodaya
  */
 public class UserForm extends BeanEditor {
@@ -306,7 +307,8 @@ public class UserForm extends BeanEditor {
 		double cost = 0;
 
 		try {
-			cost = Double.parseDouble(tfCostPerHour.getText());
+            NumberFormat nf = NumberFormat.getInstance();
+            cost = nf.parse(tfCostPerHour.getText()).doubleValue();
 		} catch (Exception x) {
 			throw new IllegalModelStateException("Cost per hour for " + firstName + " " + lastName + " is not valid.");
 		}

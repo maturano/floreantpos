@@ -43,7 +43,7 @@ import com.floreantpos.util.ShiftUtil;
  */
 public class MenuItemForm extends BeanEditor implements ActionListener {
 	ShiftTableModel shiftTableModel;
-	
+
 	/** Creates new form FoodItemEditor */
 	public MenuItemForm() throws Exception {
 		this(new MenuItem());
@@ -53,28 +53,28 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 
 	public MenuItemForm(MenuItem menuItem) throws Exception {
 		initComponents();
-		
+
 		tfName.setDocument(new FixedLengthDocument(30));
-		
+
 		MenuGroupDAO foodGroupDAO = new MenuGroupDAO();
 		List<MenuGroup> foodGroups = foodGroupDAO.findAll();
 		cbGroup.setModel(new ComboBoxModel(foodGroups));
-		
+
 		TaxDAO taxDAO = new TaxDAO();
 		List<Tax> taxes = taxDAO.findAll();
 		cbTax.setModel(new ComboBoxModel(taxes));
-		
+
 		menuItemModifierGroups = menuItem.getMenuItemModiferGroups();
 		menuItemMGListModel = new MenuItemMGListModel();
 		tableTicketItemModifierGroups.setModel(menuItemMGListModel);
 		shiftTable.setModel(shiftTableModel = new ShiftTableModel(menuItem.getShifts()));
-		
+
 		btnNewModifierGroup.addActionListener(this);
 		btnEditModifierGroup.addActionListener(this);
 		btnDeleteModifierGroup.addActionListener(this);
 		btnAddShift.addActionListener(this);
 		btnDeleteShift.addActionListener(this);
-		
+
 		setBean(menuItem);
 	}
 
@@ -338,7 +338,7 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
     }//GEN-LAST:event_btnNewTaxdoCreateNewTax
 
     private void btnNewModifierGroupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewModifierGroupActionPerformed
-    	
+
     }//GEN-LAST:event_btnNewModifierGroupActionPerformed
 
 	private void doCreateNewGroup(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doCreateNewGroup
@@ -384,7 +384,7 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
     // End of variables declaration//GEN-END:variables
     private List<MenuItemModifierGroup> menuItemModifierGroups;
 	private MenuItemMGListModel menuItemMGListModel;
-    
+
     private void addMenuItemModifierGroup() {
     	try {
 			MenuItemModifierGroupForm form = new MenuItemModifierGroupForm();
@@ -398,14 +398,14 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 			MessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
 		}
     }
-    
+
     private void editMenuItemModifierGroup() {
     	try {
     		int index = tableTicketItemModifierGroups.getSelectedRow();
     		if(index < 0) return;
-    		
+
     		MenuItemModifierGroup menuItemModifierGroup = menuItemMGListModel.get(index);
-    		
+
     		MenuItemModifierGroupForm form = new MenuItemModifierGroupForm(menuItemModifierGroup);
     		BeanEditorDialog dialog = new BeanEditorDialog(form, getParentFrame(), true);
     		dialog.open();
@@ -420,7 +420,7 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
     	try {
     		int index = tableTicketItemModifierGroups.getSelectedRow();
     		if(index < 0) return;
-    		
+
     		if(ConfirmDeleteDialog.showMessage(this, com.floreantpos.POSConstants.CONFIRM_DELETE, com.floreantpos.POSConstants.CONFIRM) == ConfirmDeleteDialog.YES){
     			menuItemMGListModel.remove(index);
     		}
@@ -428,12 +428,12 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
     		MessageDialog.showError(com.floreantpos.POSConstants.ERROR_MESSAGE, x);
     	}
     }
-    
+
 	@Override
 	public boolean save() {
 		try {
 			if(!updateModel()) return false;
-			
+
 			MenuItem menuItem = (MenuItem) getBean();
 			MenuItemDAO menuItemDAO = new MenuItemDAO();
 			menuItemDAO.saveOrUpdate(menuItem);
@@ -451,7 +451,7 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 	@Override
 	protected void updateView() {
 		MenuItem menuItem = (MenuItem) getBean();
-		
+
 		if(menuItem.getId() != null && !Hibernate.isInitialized(menuItem.getMenuItemModiferGroups())) {
 			//initialize food item modifer groups.
 			MenuItemDAO dao = new MenuItemDAO();
@@ -460,12 +460,12 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 			Hibernate.initialize(menuItem.getMenuItemModiferGroups());
 			session.close();
 		}
-		
+
 		tfName.setText(menuItem.getName());
 		tfPrice.setValue(Double.valueOf(menuItem.getPrice()));
 		tfDiscountRate.setText(String.valueOf(menuItem.getDiscountRate()));
 		chkVisible.setSelected(menuItem.isVisible());
-		
+
 		if(menuItem.getId() == null) {
 //			cbGroup.setSelectedIndex(0);
 //			cbTax.setSelectedIndex(0);
@@ -483,22 +483,26 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 			MessageDialog.showError(com.floreantpos.POSConstants.NAME_REQUIRED);
 			return false;
 		}
-		
+
 		MenuItem menuItem = (MenuItem) getBean();
 		menuItem.setName(itemName);
 		menuItem.setParent((MenuGroup) cbGroup.getSelectedItem());
 		menuItem.setPrice(Double.valueOf(tfPrice.getValue().toString()).doubleValue());
 		menuItem.setTax((Tax) cbTax.getSelectedItem());
 		menuItem.setVisible(chkVisible.isSelected());
-		
+
         try {
-            menuItem.setDiscountRate(Double.parseDouble(tfDiscountRate.getText()));
+            menuItem.setDiscountRate(
+                java.text.NumberFormat.getInstance().parse(
+                    tfDiscountRate.getText()
+                ).doubleValue()
+            );
         } catch (Exception x){}
 		menuItem.setMenuItemModiferGroups(menuItemModifierGroups);
 		menuItem.setShifts(shiftTableModel.getShifts());
 		return true;
 	}
-	
+
 	public String getDisplayText() {
     	MenuItem foodItem = (MenuItem) getBean();
     	if(foodItem.getId() == null) {
@@ -506,17 +510,17 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
     	}
     	return com.floreantpos.POSConstants.EDIT_MENU_ITEM;
     }
-	
+
 	class MenuItemMGListModel extends AbstractTableModel {
 		String[] cn = {com.floreantpos.POSConstants.GROUP_NAME, com.floreantpos.POSConstants.MIN_QUANTITY, com.floreantpos.POSConstants.MAX_QUANTITY};
-		
+
 		MenuItemMGListModel(){
 		}
-		
+
 		public MenuItemModifierGroup get(int index) {
 			return menuItemModifierGroups.get(index);
 		}
-		
+
 		public void add(MenuItemModifierGroup group) {
 			if(menuItemModifierGroups == null) {
 				menuItemModifierGroups = new ArrayList<MenuItemModifierGroup>();
@@ -524,7 +528,7 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 			menuItemModifierGroups.add(group);
 			fireTableDataChanged();
 		}
-		
+
 		public void remove(int index) {
 			if(menuItemModifierGroups == null) {
 				return;
@@ -532,7 +536,7 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 			menuItemModifierGroups.remove(index);
 			fireTableDataChanged();
 		}
-		
+
 		public void remove(MenuItemModifierGroup group) {
 			if(menuItemModifierGroups == null) {
 				return;
@@ -543,7 +547,7 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 
 		public int getRowCount() {
 			if(menuItemModifierGroups == null) return 0;
-			
+
 			return menuItemModifierGroups.size();
 
 		}
@@ -551,7 +555,7 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 		public int getColumnCount() {
 			return cn.length;
 		}
-		
+
 		@Override
 		public String getColumnName(int column) {
 			return cn[column];
@@ -559,26 +563,26 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			MenuItemModifierGroup menuItemModifierGroup = menuItemModifierGroups.get(rowIndex);
-			
+
 			switch(columnIndex) {
 				case 0:
 					return menuItemModifierGroup.getModifierGroup().getName();
-					
+
 				case 1:
 					return Integer.valueOf(menuItemModifierGroup.getMinQuantity());
-					
+
 				case 2:
 					return Integer.valueOf(menuItemModifierGroup.getMaxQuantity());
 			}
 			return null;
 		}
 	}
-	
+
 	class ShiftTableModel extends AbstractTableModel {
 		List<MenuItemShift> shifts;
 		String[] cn = {com.floreantpos.POSConstants.START_TIME, com.floreantpos.POSConstants.END_TIME, com.floreantpos.POSConstants.PRICE};
 		Calendar calendar = Calendar.getInstance();
-		
+
 		ShiftTableModel(List<MenuItemShift> shifts){
 			if(shifts == null) {
 				this.shifts = new ArrayList<MenuItemShift>();
@@ -587,11 +591,11 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 				this.shifts = new ArrayList<MenuItemShift>(shifts);
 			}
 		}
-		
+
 		public MenuItemShift get(int index) {
 			return shifts.get(index);
 		}
-		
+
 		public void add(MenuItemShift group) {
 			if(shifts == null) {
 				shifts = new ArrayList<MenuItemShift>();
@@ -599,7 +603,7 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 			shifts.add(group);
 			fireTableDataChanged();
 		}
-		
+
 		public void remove(int index) {
 			if(shifts == null) {
 				return;
@@ -607,7 +611,7 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 			shifts.remove(index);
 			fireTableDataChanged();
 		}
-		
+
 		public void remove(MenuItemShift group) {
 			if(shifts == null) {
 				return;
@@ -618,7 +622,7 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 
 		public int getRowCount() {
 			if(shifts == null) return 0;
-			
+
 			return shifts.size();
 
 		}
@@ -626,45 +630,45 @@ public class MenuItemForm extends BeanEditor implements ActionListener {
 		public int getColumnCount() {
 			return cn.length;
 		}
-		
+
 		@Override
 		public String getColumnName(int column) {
 			return cn[column];
 		}
-		
+
 		public List<MenuItemShift> getShifts() {
 			return shifts;
 		}
 
 		public Object getValueAt(int rowIndex, int columnIndex) {
 			MenuItemShift shift = shifts.get(rowIndex);
-			
+
 			switch(columnIndex) {
 				case 0:
 					return ShiftUtil.buildShiftTimeRepresentation(shift.getShift().getStartTime());
-					
+
 				case 1:
 					return ShiftUtil.buildShiftTimeRepresentation(shift.getShift().getEndTime());
-					
+
 				case 2:
 					return String.valueOf(shift.getShiftPrice());
 			}
 			return null;
 		}
 	}
-	
+
 	private void addShift() {
 		//TODO: ???
 		MenuItemShiftDialog dialog = new MenuItemShiftDialog((Dialog) this.getTopLevelAncestor());
 		dialog.setSize(350, 220);
         dialog.open();
-        
+
         if(!dialog.isCanceled()) {
         	MenuItemShift menuItemShift = dialog.getMenuItemShift();
         	shiftTableModel.add(menuItemShift);
         }
 	}
-	
+
 	private void deleteShift() {
 		int selectedRow = shiftTable.getSelectedRow();
 		if(selectedRow >= 0) {

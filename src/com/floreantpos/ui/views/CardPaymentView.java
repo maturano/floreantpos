@@ -6,6 +6,11 @@
 
 package com.floreantpos.ui.views;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -42,6 +47,8 @@ public class CardPaymentView extends PaymentView {
 
 	private double gratuityAmount;
 
+    private NumberFormat nf = NumberFormat.getInstance();
+
 	/** Creates new form CardView */
 	public CardPaymentView() {
 		initComponents();
@@ -53,7 +60,7 @@ public class CardPaymentView extends PaymentView {
 				double gratuity = 0;
 
 				try {
-					gratuity = Double.parseDouble(tfGratuityAmount.getText());
+                    gratuity = nf.parse(tfGratuityAmount.getText()).doubleValue();
 				} catch (Exception x) {
 				}
 				cardAmount = getDueAmount();
@@ -356,25 +363,27 @@ public class CardPaymentView extends PaymentView {
 
 	private void btnSettleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSettleActionPerformed
 		try {
-			try {
+            try {
 				String gratuity = tfGratuityAmount.getText();
 				if (gratuity == null || gratuity.trim().equals("")) {
 					gratuityAmount = 0;
 				}
 				else {
-					gratuityAmount = Double.parseDouble(gratuity);
+                    gratuityAmount = nf.parse(gratuity).doubleValue();
 				}
-			} catch (NumberFormatException x) {
-				POSMessageDialog.showError("Gratuity amount is not valid");
-				return;
-			}
+            } catch (ParseException ex) {
+                Logger.getLogger(CardPaymentView.class.getName()).log(Level.SEVERE, null, ex);
+                POSMessageDialog.showError("Gratuity amount is not valid");
+                return;
+            }
 			double tenderedAmount = 0;
-			try {
-				tenderedAmount = Double.parseDouble(tfCardAmount.getText());
-			} catch (NumberFormatException x) {
-				POSMessageDialog.showError("Amount is not valid");
-				return;
-			}
+            try {
+                tenderedAmount = nf.parse(tfCardAmount.getText()).doubleValue();
+            } catch (ParseException ex) {
+                Logger.getLogger(CardPaymentView.class.getName()).log(Level.SEVERE, null, ex);
+                POSMessageDialog.showError("Amount is not valid");
+                return;
+            }
 			tenderedAmount = tenderedAmount - gratuityAmount;
 			if (tenderedAmount < 0) {
 				POSMessageDialog.showError("Insufficient amount");
@@ -383,7 +392,7 @@ public class CardPaymentView extends PaymentView {
 
 			String authorizationCode = tfAuthorizationCode.getText();
 			if (getCardType() == CARD_TYPE_CREDIT) {
-				
+
 				settleTickets(tenderedAmount, gratuityAmount, new CreditCardTransaction(), getWhichCard(), authorizationCode);
 			}
 			if (getCardType() == CARD_TYPE_DEBIT) {
@@ -437,11 +446,12 @@ public class CardPaymentView extends PaymentView {
 				int index = string.indexOf('.');
 				if (index < 0) {
 					double value = 0;
-					try {
-						value = Double.parseDouble(string);
-					} catch (NumberFormatException x) {
-						Toolkit.getDefaultToolkit().beep();
-					}
+                    try {
+                        value = nf.parse(string).doubleValue();
+                    } catch (ParseException ex) {
+                        Logger.getLogger(CardPaymentView.class.getName()).log(Level.SEVERE, null, ex);
+                        Toolkit.getDefaultToolkit().beep();
+                    }
 					if (value == 0) {
 						tf.setText(s);
 					}
@@ -456,12 +466,13 @@ public class CardPaymentView extends PaymentView {
 			if (tf == tfGratuityAmount) {
 				double gAmount = 0;
 				double amount = getDueAmount();
-				try {
-					gAmount = Double.parseDouble(tfGratuityAmount.getText());
-				} catch (NumberFormatException x) {
-					Toolkit.getDefaultToolkit().beep();
-					return;
-				}
+                try {
+                    gAmount = nf.parse(tfGratuityAmount.getText()).doubleValue();
+                } catch (ParseException ex) {
+                    Logger.getLogger(CardPaymentView.class.getName()).log(Level.SEVERE, null, ex);
+                    Toolkit.getDefaultToolkit().beep();
+                    return;
+                }
 				tfCardAmount.setText(Application.formatNumber(amount + gAmount));
 			}
 		}

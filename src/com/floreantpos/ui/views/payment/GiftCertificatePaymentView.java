@@ -6,6 +6,11 @@
 
 package com.floreantpos.ui.views.payment;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -28,6 +33,7 @@ import com.floreantpos.ui.views.order.RootView;
  */
 public class GiftCertificatePaymentView extends PaymentView {
 	public final static String VIEW_NAME = "GIFTCERT_VIEW";
+    private NumberFormat nf = NumberFormat.getInstance();
 
 	/** Creates new form CashPaymentView */
 	public GiftCertificatePaymentView() {
@@ -269,24 +275,24 @@ public class GiftCertificatePaymentView extends PaymentView {
 	private void doFinish(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doFinish
 		double faceValue = 0;
 		try {
-			faceValue = Double.parseDouble(tfFaceValue.getText());
+            faceValue = nf.parse(tfFaceValue.getText()).doubleValue();
 		} catch(Exception e) {
 			POSMessageDialog.showError("Gift certificate face value is not valid");
 			return;
 		}
 		double tenderedAmount = 0;
 		try {
-			tenderedAmount = Double.parseDouble(tfAmountTendered.getText());
+            tenderedAmount = nf.parse(tfAmountTendered.getText()).doubleValue();
 		} catch (Exception e) {
 			POSMessageDialog.showError("Amount tendered is not valid");
 			return;
 		}
-		
+
 		if(faceValue < tenderedAmount) {
 			POSMessageDialog.showError("Face value cannot be less than tendered amount.");
 			return;
 		}
-		
+
 		GiftCertificateTransaction transaction = new GiftCertificateTransaction();
 		transaction.setFaceValue(faceValue);
 		transaction.setPaidAmount(tenderedAmount);
@@ -349,7 +355,7 @@ public class GiftCertificatePaymentView extends PaymentView {
 	public Dimension getPreferredSize() {
 		return preferredSize;
 	}
-	
+
 	private JTextField getFocusedTextField() {
 		if (tfFaceValue.hasFocus()) {
 			return tfFaceValue;
@@ -379,11 +385,12 @@ public class GiftCertificatePaymentView extends PaymentView {
 				int index = string.indexOf('.');
 				if (index < 0) {
 					double value = 0;
-					try {
-						value = Double.parseDouble(string);
-					} catch (NumberFormatException x) {
-						Toolkit.getDefaultToolkit().beep();
-					}
+                    try {
+                        value = nf.parse(string).doubleValue();
+                    } catch (ParseException ex) {
+                        Logger.getLogger(GiftCertificatePaymentView.class.getName()).log(Level.SEVERE, null, ex);
+                        Toolkit.getDefaultToolkit().beep();
+                    }
 					if (value == 0) {
 						tf.setText(s);
 					}

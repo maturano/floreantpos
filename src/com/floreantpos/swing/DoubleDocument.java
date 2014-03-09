@@ -4,6 +4,7 @@
 package com.floreantpos.swing;
 
 import java.awt.Toolkit;
+import java.text.NumberFormat;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -20,16 +21,17 @@ public class DoubleDocument extends PlainDocument {
 	@Override
 	public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
 		String value = getText(0, getLength());
-		
+
 		value = value + str;
-		
-		try {
-			Double.parseDouble(value);
+
+        try {
+            NumberFormat nf = NumberFormat.getInstance();
+            nf.parse(value).doubleValue();
 		}catch(Exception x) {
 			Toolkit.getDefaultToolkit().beep();
 			return;
 		}
-		
+
 		super.insertString(offs, str, a);
 	}
 }

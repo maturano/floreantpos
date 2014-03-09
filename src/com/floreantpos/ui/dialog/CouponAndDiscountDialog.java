@@ -11,6 +11,7 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.text.NumberFormat;
 
 import javax.swing.AbstractListModel;
 import javax.swing.DefaultListCellRenderer;
@@ -35,18 +36,19 @@ public class CouponAndDiscountDialog extends POSDialog implements ActionListener
 	private List<CouponAndDiscount> couponList;
 	private TicketCouponAndDiscount ticketCoupon;
 	private Ticket ticket;
-    
+    private NumberFormat nf = NumberFormat.getInstance();
+
     /** Creates new form CouponAndDiscountDialog */
     public CouponAndDiscountDialog() {
     	super(Application.getPosWindow(), true, false);
 
     	initComponents();
-        
+
         tfValue.getDocument().addDocumentListener(new DocumentListener() {
 
 			public void insertUpdate(DocumentEvent e) {
 				try {
-					double totalDiscount = Double.parseDouble(tfValue.getText());
+                    double totalDiscount = nf.parse(tfValue.getText()).doubleValue();
 					lblTotalDiscount.setText(Application.formatNumber(totalDiscount));
 				} catch (Exception x) {
 				}
@@ -54,7 +56,7 @@ public class CouponAndDiscountDialog extends POSDialog implements ActionListener
 
 			public void removeUpdate(DocumentEvent e) {
 				try {
-					double totalDiscount = Double.parseDouble(tfValue.getText());
+                    double totalDiscount = nf.parse(tfValue.getText()).doubleValue();
 					lblTotalDiscount.setText(Application.formatNumber(totalDiscount));
 				} catch (Exception x) {
 				}
@@ -62,16 +64,16 @@ public class CouponAndDiscountDialog extends POSDialog implements ActionListener
 
 			public void changedUpdate(DocumentEvent e) {
 				try {
-					double totalDiscount = Double.parseDouble(tfValue.getText());
+                    double totalDiscount = nf.parse(tfValue.getText()).doubleValue();
 					lblTotalDiscount.setText(Application.formatNumber(totalDiscount));
 				} catch (Exception x) {
 				}
 			}
-			
+
 		});
         lblTotalDiscount.setText("");
         btnEditValue.setEnabled(false);
-        
+
         btnUp.setActionCommand("scrollUP");
 		btnDown.setActionCommand("scrollDown");
 		btnUp.addActionListener(this);
@@ -82,7 +84,7 @@ public class CouponAndDiscountDialog extends POSDialog implements ActionListener
 
 		ticketCoupon = new TicketCouponAndDiscount();
     }
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -270,10 +272,10 @@ public class CouponAndDiscountDialog extends POSDialog implements ActionListener
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
+
     public TicketCouponAndDiscount getSelectedCoupon() {
 		try {
-			double parseDouble = Double.parseDouble(tfValue.getText());
+            double parseDouble = nf.parse(tfValue.getText()).doubleValue();
 			ticketCoupon.setValue(parseDouble);
 		}catch(Exception x) {
 			throw new PosException("CouponAndDiscount amount is not valid");
@@ -287,7 +289,7 @@ public class CouponAndDiscountDialog extends POSDialog implements ActionListener
         dialog.setTitle("Enter value");
         dialog.pack();
         dialog.open();
-        
+
         if(!dialog.isCanceled()) {
         	double value = dialog.getValue();
         	tfValue.setText(Application.formatNumber(value));
@@ -312,8 +314,8 @@ public class CouponAndDiscountDialog extends POSDialog implements ActionListener
         setCanceled(true);
         dispose();
     }//GEN-LAST:event_doCancel
-    
-    
+
+
     public void initData() throws Exception {
 		CouponAndDiscountDAO dao = new CouponAndDiscountDAO();
 		couponList = dao.getValidCoupons();
@@ -369,7 +371,7 @@ public class CouponAndDiscountDialog extends POSDialog implements ActionListener
 			tfValue.setText("");
 			return;
 		}
-		
+
 		btnEditValue.setEnabled(false);
 
 		tfName.setText(coupon.getName());
@@ -380,7 +382,7 @@ public class CouponAndDiscountDialog extends POSDialog implements ActionListener
 		tfNumber.setText(String.valueOf(coupon.getId()));
 		tfType.setText(CouponAndDiscount.COUPON_TYPE_NAMES[coupon.getType()]);
 		tfValue.setText(Application.formatNumber(coupon.getValue()));
-		
+
 		double totalDiscount = 0;
 		double subtotal = ticket.getSubtotalAmount();
 
@@ -399,7 +401,7 @@ public class CouponAndDiscountDialog extends POSDialog implements ActionListener
 		CouponAndDiscount coupon = (CouponAndDiscount) listCoupons.getSelectedValue();
 		updateCouponView(coupon);
 	}
-	
+
 	public Ticket getTicket() {
 		return ticket;
 	}
@@ -407,7 +409,7 @@ public class CouponAndDiscountDialog extends POSDialog implements ActionListener
 	public void setTicket(Ticket ticket) {
 		this.ticket = ticket;
 	}
-    
+
     class CouponListModel extends AbstractListModel {
 
 		public int getSize() {
@@ -434,7 +436,7 @@ public class CouponAndDiscountDialog extends POSDialog implements ActionListener
 			return super.getListCellRendererComponent(list, coupon.getName(), index, isSelected, cellHasFocus);
 		}
 	}
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.floreantpos.swing.PosButton btnCancel;
     private com.floreantpos.swing.PosButton btnDown;
@@ -458,5 +460,5 @@ public class CouponAndDiscountDialog extends POSDialog implements ActionListener
     private javax.swing.JTextField tfValue;
     private com.floreantpos.ui.TitlePanel titlePanel1;
     // End of variables declaration//GEN-END:variables
-    
+
 }

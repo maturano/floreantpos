@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 
 import javax.swing.ImageIcon;
 import javax.swing.JSeparator;
@@ -16,10 +17,13 @@ import com.floreantpos.IconFactory;
 import com.floreantpos.POSConstants;
 import com.floreantpos.swing.PosButton;
 import com.floreantpos.ui.TitlePanel;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class NumberSelectionDialog2 extends POSDialog implements ActionListener {
 	private int defaultValue;
-	
+
 	private TitlePanel titlePanel;
 	private JTextField tfNumber;
 
@@ -27,7 +31,7 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 
 	public NumberSelectionDialog2() {
 		setResizable(false);
-		
+
 		Container contentPane = getContentPane();
 
 		MigLayout layout = new MigLayout("fillx", "[60][60][60]", "");
@@ -88,7 +92,7 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 		contentPane.add(posButton, "grow, height 55");
 
 	}
-	
+
 	private void doOk() {
 		if (!validate(tfNumber.getText())) {
 			POSMessageDialog.showError(POSConstants.INVALID_NUMBER);
@@ -97,16 +101,16 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 		setCanceled(false);
 		dispose();
 	}
-	
+
 	private void doCancel() {
 		setCanceled(true);
 		dispose();
 	}
-	
+
 	private void doClearAll() {
 		tfNumber.setText(String.valueOf(defaultValue));
 	}
-	
+
 	private void doClear() {
 		String s = tfNumber.getText();
 		if (s.length() > 1) {
@@ -117,7 +121,7 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 		}
 		tfNumber.setText(s);
 	}
-	
+
 	private void doInsertNumber(String number) {
 		String s = tfNumber.getText();
 		if (s.equals("0")) {
@@ -132,7 +136,7 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 		}
 		tfNumber.setText(s);
 	}
-	
+
 	private void doInsertDot() {
 		if (isFloatingPoint() && tfNumber.getText().indexOf('.') < 0) {
 			String string = tfNumber.getText() + ".";
@@ -146,7 +150,7 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 
 	public void actionPerformed(ActionEvent e) {
 		String actionCommand = e.getActionCommand();
-		
+
 		if(POSConstants.CANCEL.equalsIgnoreCase(actionCommand)) {
 			doCancel();
 		}
@@ -170,11 +174,12 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 
 	private boolean validate(String str) {
 		if (isFloatingPoint()) {
-			try {
-				Double.parseDouble(str);
-			} catch (Exception x) {
-				return false;
-			}
+            try {
+                NumberFormat nf = NumberFormat.getInstance();
+                nf.parse(str).doubleValue();
+            } catch (Exception x) {
+                return false;
+            }
 		}
 		else {
 			try {
@@ -188,13 +193,21 @@ public class NumberSelectionDialog2 extends POSDialog implements ActionListener 
 
 	public void setTitle(String title) {
 		titlePanel.setTitle(title);
-		
+
 		super.setTitle(title);
 	}
 
-	public double getValue() {
-		return Double.parseDouble(tfNumber.getText());
-	}
+    public double getValue() {
+        NumberFormat nf = NumberFormat.getInstance();
+        Double value    = null;
+        try {
+            value = nf.parse(tfNumber.getText()).doubleValue();
+        } catch (ParseException ex) {
+            Logger.getLogger(NumberSelectionDialog2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return value;
+    }
 
 	public void setValue(double value) {
 		if (isFloatingPoint()) {

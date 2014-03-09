@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class DrawerPullReportExplorer extends TransparentPanel {
 	private JXDatePicker toDatePicker = new JXDatePicker();
 	private JButton btnGo = new JButton(com.floreantpos.POSConstants.GO);
 	private JButton btnEditActualAmount = new JButton(com.floreantpos.POSConstants.EDIT_ACTUAL_AMOUNT);
-	
+
 	private static SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("dd MMM, yyyy hh:mm a");
 
 	private JTable table;
@@ -53,7 +54,7 @@ public class DrawerPullReportExplorer extends TransparentPanel {
 		add(new JScrollPane(table = new JTable(new DrawerPullExplorerTableModel(null))));
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setDefaultRenderer(Object.class, new PosTableRenderer());
-		
+
 		JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		bottomPanel.add(btnEditActualAmount);
 		add(bottomPanel, BorderLayout.SOUTH);
@@ -70,7 +71,7 @@ public class DrawerPullReportExplorer extends TransparentPanel {
 
 		});
 		btnEditActualAmount.addActionListener(new ActionListener() {
-			
+
 			public void actionPerformed(ActionEvent e) {
 				try {
 					int selectedRow = table.getSelectedRow();
@@ -78,23 +79,24 @@ public class DrawerPullReportExplorer extends TransparentPanel {
 						JOptionPane.showMessageDialog(DrawerPullReportExplorer.this, com.floreantpos.POSConstants.SELECT_DRAWER_PULL_TO_EDIT, com.floreantpos.POSConstants.MDS_POS, JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					
+
 					String amountString = JOptionPane.showInputDialog(DrawerPullReportExplorer.this, com.floreantpos.POSConstants.ENTER_ACTUAL_AMOUNT + ":");
 					if(amountString == null) {
 						return;
 					}
 					double amount = 0;
 					try {
-						amount = Double.parseDouble(amountString);
+                        NumberFormat nf = NumberFormat.getInstance();
+                        amount = nf.parse(amountString).doubleValue();
 					}catch(Exception x) {
 						JOptionPane.showMessageDialog(DrawerPullReportExplorer.this, com.floreantpos.POSConstants.INVALID_AMOUNT, com.floreantpos.POSConstants.MDS_POS, JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					
+
 					DrawerPullExplorerTableModel model = (DrawerPullExplorerTableModel) table.getModel();
 					DrawerPullReport report = (DrawerPullReport) model.getRowData(selectedRow);
 					report.setCashToDeposit(amount);
-					
+
 					DrawerPullReportDAO dao = new DrawerPullReportDAO();
 					dao.saveOrUpdate(report);
 					model.updateItem(selectedRow);
@@ -102,7 +104,7 @@ public class DrawerPullReportExplorer extends TransparentPanel {
 					POSMessageDialog.showError(DrawerPullReportExplorer.this, POSConstants.ERROR_MESSAGE, e1);
 				}
 			}
-			
+
 		});
 	}
 
@@ -123,8 +125,8 @@ public class DrawerPullReportExplorer extends TransparentPanel {
 
 	class DrawerPullExplorerTableModel extends ListTableModel {
 		String[] columnNames = { com.floreantpos.POSConstants.ID, com.floreantpos.POSConstants.TIME, com.floreantpos.POSConstants.DRAWER_PULL_AMOUNT, com.floreantpos.POSConstants.ACTUAL_AMOUNT };
-		
-		
+
+
 		DrawerPullExplorerTableModel(List<DrawerPullReport> list) {
 			setRows(list);
 			setColumnNames(columnNames);

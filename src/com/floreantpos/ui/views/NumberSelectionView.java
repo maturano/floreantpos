@@ -6,6 +6,11 @@
 
 package com.floreantpos.ui.views;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -30,10 +35,12 @@ import com.floreantpos.ui.dialog.POSMessageDialog;
  */
 public class NumberSelectionView extends TransparentPanel implements ActionListener {
 	private TitledBorder titledBorder;
-	
+
 	private boolean decimalAllowed;
 	private JTextField tfNumber;
-	
+
+    private NumberFormat nf = NumberFormat.getInstance();
+
 	/** Creates new form NumberSelectionView */
 	public NumberSelectionView() {
 		initComponents();
@@ -41,26 +48,26 @@ public class NumberSelectionView extends TransparentPanel implements ActionListe
 
 	private void initComponents() {
 		setLayout(new BorderLayout(5,5));
-		
+
 		tfNumber = new JTextField();
 		tfNumber.setText("0");
 		tfNumber.setFont(tfNumber.getFont().deriveFont(Font.BOLD, 24));
 		tfNumber.setEditable(false);
 		tfNumber.setBackground(Color.WHITE);
 		tfNumber.setHorizontalAlignment(JTextField.RIGHT);
-		
+
 		JPanel northPanel = new JPanel(new BorderLayout(5,5));
 		northPanel.add(tfNumber, BorderLayout.CENTER);
-		
+
 		PosButton btnClearAll = new PosButton();
 		btnClearAll.setText(com.floreantpos.POSConstants.CLEAR_ALL);
 		btnClearAll.setActionCommand(com.floreantpos.POSConstants.CLEAR_ALL);
 		btnClearAll.setPreferredSize(new Dimension(90, 50));
 		btnClearAll.addActionListener(this);
 		northPanel.add(btnClearAll, BorderLayout.EAST);
-		
+
 		add(northPanel, BorderLayout.NORTH);
-		
+
 		String[][] numbers = {
         		{"7","8","9"},
         		{"4","5","6"},
@@ -73,10 +80,10 @@ public class NumberSelectionView extends TransparentPanel implements ActionListe
         		{ "1_32.png", "2_32.png", "3_32.png" }, 
         		{ "dot_32.png", "0_32.png", "clear_32.png" } 
         	};
-        
+
         JPanel centerPanel = new JPanel(new GridLayout(4,3,5,5));
         Dimension preferredSize = new Dimension(90,80);
-        
+
         for (int i = 0; i < numbers.length; i++) {
 			for (int j = 0; j < numbers[i].length; j++) {
 				PosButton posButton = new PosButton();
@@ -100,10 +107,10 @@ public class NumberSelectionView extends TransparentPanel implements ActionListe
 			}
 		}
 		add(centerPanel, BorderLayout.CENTER);
-		
+
 		titledBorder = new TitledBorder("");
 		titledBorder.setTitleJustification(TitledBorder.CENTER);
-		
+
 		setBorder(titledBorder);
 	}
 
@@ -121,7 +128,7 @@ public class NumberSelectionView extends TransparentPanel implements ActionListe
 				s = "0";
 			}
 			tfNumber.setText(s);
-		} 
+		}
 		else if (actionCommand.equals(".")) {
 			if (isDecimalAllowed() && tfNumber.getText().indexOf('.') < 0) {
 				String string = tfNumber.getText() + ".";
@@ -138,7 +145,7 @@ public class NumberSelectionView extends TransparentPanel implements ActionListe
 				tfNumber.setText(actionCommand);
 				return;
 			}
-			
+
 			s = s + actionCommand;
 			if(!validate(s)) {
 				POSMessageDialog.showError("Invalid number");
@@ -146,13 +153,13 @@ public class NumberSelectionView extends TransparentPanel implements ActionListe
 			}
 			tfNumber.setText(s);
 		}
-		
+
 	}
-	
+
 	private boolean validate(String str) {
     	if(isDecimalAllowed()) {
     		try {
-    			Double.parseDouble(str);
+                nf.parse(str).doubleValue();
     		} catch (Exception x) {
     			return false;
     		}
@@ -166,14 +173,21 @@ public class NumberSelectionView extends TransparentPanel implements ActionListe
     	}
     	return true;
     }
-	
+
 	public void setTitle(String title) {
     	titledBorder.setTitle(title);
     }
-	
-	public double getValue() {
-		return Double.parseDouble(tfNumber.getText());
-	}
+
+    public double getValue() {
+        Double value = null;
+        try {
+            value = nf.parse(tfNumber.getText()).doubleValue();
+        } catch (ParseException ex) {
+            Logger.getLogger(NumberSelectionView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return value;
+    }
 
 	public void setValue(double value) {
 		if(isDecimalAllowed()) {

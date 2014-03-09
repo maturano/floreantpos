@@ -3,6 +3,7 @@ package com.floreantpos.services;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.text.NumberFormat;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -34,14 +35,14 @@ public class PosTransactionService {
 		Transaction tx = null;
 
 		GenericDAO dao = new GenericDAO();
-		
+
 		try {
 			Date currentDate = new Date();
 			boolean gratuityPaid = false;
-			
+
 			session = dao.getSession();
 			tx = session.beginTransaction();
-			
+
 			double totalDueAmount = 0;
 			double cashBackAmount = 0;
 			for (Ticket ticket : tickets) {
@@ -51,37 +52,38 @@ public class PosTransactionService {
 			if(cashBackAmount < 0) {
 				cashBackAmount = 0;
 			}
-			
+
 			for (Iterator it = tickets.iterator(); it.hasNext(); ) {
 				Ticket ticket = (Ticket) it.next();
-				
+
 				ticket.setVoided(false);
 				ticket.setDrawerResetted(false);
 				ticket.setClosingDate(currentDate);
 				ticket.setTerminal(terminal);
 				ticket.setCardNumber(cardAuthorizationCode);
-				
-				double paidAmount = Double.parseDouble(Application.formatNumber(ticket.getPaidAmount()));
-				double dueAmount = Double.parseDouble(Application.formatNumber(ticket.getDueAmount()));
-				
+
+                NumberFormat nf = NumberFormat.getInstance();
+                double paidAmount = nf.parse(Application.formatNumber(ticket.getPaidAmount())).doubleValue();
+                double dueAmount  = nf.parse(Application.formatNumber(ticket.getDueAmount())).doubleValue();
+
 				if(tenderedAmount >= dueAmount) {
 					paidAmount += dueAmount;
 					tenderedAmount -= dueAmount;
 					dueAmount = 0;
-					
+
 					ticket.setPaid(true);
 					ticket.setClosed(true);
 				}
 				else {
 					paidAmount += tenderedAmount;
 					dueAmount -= tenderedAmount;
-					
+
 					ticket.setPaid(false);
 					ticket.setClosed(false);
 				}
 				ticket.setPaidAmount(paidAmount);
 				ticket.setDueAmount(dueAmount);
-				
+
 				if (!gratuityPaid && gratuityAmount > 0) {
 					Gratuity gratuity = new Gratuity();
 					gratuity.setAmount(gratuityAmount);
@@ -89,22 +91,22 @@ public class PosTransactionService {
 					gratuity.setPaid(false);
 					gratuity.setTicket(ticket);
 					gratuity.setTerminal(ticket.getTerminal());
-					
+
 					ticket.setGratuity(gratuity);
-					
+
 					gratuityPaid = true;
 				}
 
 				PosTransaction posTransaction = null;
 				if (transaction instanceof CashTransaction) {
 					posTransaction = new CashTransaction();
-					
+
 					Double currentBalance = terminal.getCurrentBalance();
 					Double totalPrice = ticket.getTotalAmount();
 					double newBalance = currentBalance + totalPrice;
 
 					terminal.setCurrentBalance(newBalance);
-					
+
 					ticket.setTransactionType(PosTransaction.TYPE_CASH);
 				}
 				else if (transaction instanceof CreditCardTransaction) {
@@ -124,20 +126,20 @@ public class PosTransactionService {
 				else if (transaction instanceof GiftCertificateTransaction) {
 					posTransaction = transaction;
 					GiftCertificateTransaction giftCertificateTransaction = (GiftCertificateTransaction) posTransaction;
-						
+
 					Double currentBalance = terminal.getCurrentBalance();
 					double newBalance = currentBalance - giftCertificateTransaction.getCashBackAmount();
 					terminal.setCurrentBalance(newBalance);
 
 					ticket.setTransactionType(PosTransaction.TYPE_GIFT_CERT);
 				}
-				
+
 				posTransaction.setTicket(ticket);
 				posTransaction.setSubtotalAmount(ticket.getSubtotalAmount());
 				posTransaction.setDiscountAmount(ticket.getDiscountAmount());
 				posTransaction.setTaxAmount(ticket.getTaxAmount());
 				posTransaction.setTotalAmount(ticket.getTotalAmount());
-				
+
 				if(ticket.getGratuity() != null) {
 					posTransaction.setGratuityAmount(ticket.getGratuity().getAmount());
 				}
@@ -145,7 +147,7 @@ public class PosTransactionService {
 				posTransaction.setTerminal(terminal);
 				posTransaction.setUser(currentUser);
 				posTransaction.setTransactionTime(currentDate);
-				
+
 				dao.saveOrUpdate(ticket, session);
 				dao.saveOrUpdate(posTransaction, session);
 				dao.saveOrUpdate(terminal, session);
@@ -161,7 +163,7 @@ public class PosTransactionService {
 		} finally {
 			dao.closeSession(session);
 		}
-		
+
 		for (Ticket ticket : tickets) {
 //			SETTLE ACTION
 			String actionMessage = com.floreantpos.POSConstants.CHK_NO + ":" + ticket.getId();

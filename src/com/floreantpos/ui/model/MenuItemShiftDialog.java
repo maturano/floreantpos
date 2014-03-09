@@ -115,8 +115,9 @@ public class MenuItemShiftDialog extends POSDialog {
 
     public boolean updateModel() {
         double price = 0;
+        java.text.NumberFormat nf = java.text.NumberFormat.getInstance();
         try {
-            price = Double.parseDouble(tfPrice.getText());
+            price = nf.parse(tfPrice.getText()).doubleValue();
         } catch (Exception x) {
             POSMessageDialog.showError(this, com.floreantpos.POSConstants.PRICE_IS_NOT_VALID_);
             return false;

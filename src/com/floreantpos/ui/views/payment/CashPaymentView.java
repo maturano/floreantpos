@@ -1,10 +1,9 @@
-/*
- * CashPaymentView.java
- *
- * Created on August 11, 2006, 7:30 PM
- */
-
 package com.floreantpos.ui.views.payment;
+
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -26,6 +25,7 @@ import com.floreantpos.ui.views.order.RootView;
  */
 public class CashPaymentView extends PaymentView {
 	public final static String VIEW_NAME = "CASHPAYMENT_VIEW";
+    private NumberFormat nf = NumberFormat.getInstance();
 
 	/** Creates new form CashPaymentView */
 	public CashPaymentView() {
@@ -233,8 +233,12 @@ public class CashPaymentView extends PaymentView {
 	}//GEN-LAST:event_btnChangePaymentActionPerformed
 
 	private void doFinish(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_doFinish
-		double tenderedAmount = Double.parseDouble(tfAmountTendered.getText());
-		settleTickets(tenderedAmount, 0, new CashTransaction(), null, null);
+        try {
+            double tenderedAmount = nf.parse(tfAmountTendered.getText()).doubleValue();
+            settleTickets(tenderedAmount, 0, new CashTransaction(), null, null);
+        } catch (ParseException ex) {
+            Logger.getLogger(CashPaymentView.class.getName()).log(Level.SEVERE, null, ex);
+        }
 	}//GEN-LAST:event_doFinish
 
 	private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -309,11 +313,12 @@ public class CashPaymentView extends PaymentView {
 				int index = string.indexOf('.');
 				if (index < 0) {
 					double value = 0;
-					try {
-						value = Double.parseDouble(string);
-					} catch (NumberFormatException x) {
-						Toolkit.getDefaultToolkit().beep();
-					}
+                    try {
+                        value = nf.parse(string).doubleValue();
+                    } catch (ParseException ex) {
+                        Logger.getLogger(CashPaymentView.class.getName()).log(Level.SEVERE, null, ex);
+                        Toolkit.getDefaultToolkit().beep();
+                    }
 					if (value == 0) {
 						tfAmountTendered.setText(s);
 					}

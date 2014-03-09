@@ -2,6 +2,7 @@ package com.floreantpos.ui.views;
 
 import java.awt.LayoutManager;
 import java.util.List;
+import java.text.NumberFormat;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -20,7 +21,7 @@ import com.floreantpos.ui.views.order.RootView;
 
 public abstract class PaymentView extends JPanel {
 	protected SettleTicketView settleTicketView;
-	
+
 	public PaymentView(LayoutManager layout, boolean isDoubleBuffered) {
 		super(layout, isDoubleBuffered);
 	}
@@ -36,7 +37,7 @@ public abstract class PaymentView extends JPanel {
 	public PaymentView() {
 		super();
 	}
-	
+
 	public SettleTicketView getSettleTicketView() {
 		return settleTicketView;
 	}
@@ -44,52 +45,52 @@ public abstract class PaymentView extends JPanel {
 	public void setSettleTicketView(SettleTicketView settleTicketView) {
 		this.settleTicketView = settleTicketView;
 	}
-	
+
 	protected double getTotalAmount() {
 		List<Ticket> ticketsToSettle = settleTicketView.getTicketsToSettle();
 		if(ticketsToSettle == null) {
 			return 0;
 		}
-		
+
 		double total = 0;
 		for (Ticket ticket : ticketsToSettle) {
 			total += ticket.getTotalAmount();
 		}
 		return total;
 	}
-	
+
 	protected double getPaidAmount() {
 		List<Ticket> ticketsToSettle = settleTicketView.getTicketsToSettle();
 		if(ticketsToSettle == null) {
 			return 0;
 		}
-		
+
 		double total = 0;
 		for (Ticket ticket : ticketsToSettle) {
 			total += ticket.getPaidAmount();
 		}
 		return total;
 	}
-	
+
 	protected double getDueAmount() {
 		List<Ticket> ticketsToSettle = settleTicketView.getTicketsToSettle();
 		if(ticketsToSettle == null) {
 			return 0;
 		}
-		
+
 		double total = 0;
 		for (Ticket ticket : ticketsToSettle) {
 			total += ticket.getDueAmount();
 		}
 		return total;
 	}
-	
+
 	protected double getTotalGratuity() {
 		List<Ticket> ticketsToSettle = settleTicketView.getTicketsToSettle();
 		if(ticketsToSettle == null) {
 			return 0;
 		}
-		
+
 		double total = 0;
 		for (Ticket ticket : ticketsToSettle) {
 			if(ticket.getGratuity() != null) {
@@ -106,28 +107,30 @@ public abstract class PaymentView extends JPanel {
 		if (!dialog.isCanceled()) {
 			SettleTicketView view = SettleTicketView.getInstance();
 			view.setPaymentView(dialog.getSelectedPaymentView());
-			
+
 			view.setTicketsToSettle(settleTicketView.getTicketsToSettle());
-			
+
 			RootView.getInstance().showView(SettleTicketView.VIEW_NAME);
 		}
 	}
-	
+
 	public void settleTickets(double tenderedAmount, double gratuityAmount, PosTransaction posTransaction, String cardType, String cardAuthorizationCode) {
-		try {
-			double totalAmount = Double.parseDouble(Application.formatNumber(getTotalAmount()));
-			double dueAmountBeforePaid = Double.parseDouble(Application.formatNumber(getDueAmount()));
-			
+        try {
+            NumberFormat nf = NumberFormat.getInstance();
+
+            double totalAmount         = nf.parse(Application.formatNumber(getTotalAmount())).doubleValue();
+            double dueAmountBeforePaid = nf.parse(Application.formatNumber(getDueAmount())).doubleValue();
+
 			List<Ticket> ticketsToSettle = settleTicketView.getTicketsToSettle();
-			
+
 			if (ticketsToSettle.size() > 1 && tenderedAmount < dueAmountBeforePaid) {
 				MessageDialog.showError(com.floreantpos.POSConstants.YOU_CANNOT_PARTIALLY_PAY_MULTIPLE_TICKETS_);
 				return;
 			}
-			
+
 			PosTransactionService service = PosTransactionService.getInstance();
 			service.settleTickets(ticketsToSettle, tenderedAmount, gratuityAmount, posTransaction, cardType, cardAuthorizationCode);
-			
+
 			try {
 				for (Ticket ticket : ticketsToSettle) {
 					PosPrintService.printTicket(ticket);
@@ -145,7 +148,7 @@ public abstract class PaymentView extends JPanel {
 					POSMessageDialog.showError(Application.getPosWindow(), com.floreantpos.POSConstants.THERE_WAS_AN_ERROR_WHILE_PRINTING_TO_KITCHEN, ee);
 				}
 			}
-			
+
 			if(Application.getPrinterConfiguration().isPrintKitchenWhenTicketPaid()) {
 				try {
 					for (Ticket ticket : ticketsToSettle) {
@@ -158,10 +161,10 @@ public abstract class PaymentView extends JPanel {
 					POSMessageDialog.showError(Application.getPosWindow(), com.floreantpos.POSConstants.THERE_WAS_AN_ERROR_WHILE_PRINTING_TO_KITCHEN, ee);
 				}
 			}*/
-			
-			double paidAmount = Double.parseDouble(Application.formatNumber(getPaidAmount()));
-			double dueAmount = Double.parseDouble(Application.formatNumber(getDueAmount()));
-			
+
+            double paidAmount = nf.parse(Application.formatNumber(getPaidAmount())).doubleValue();
+            double dueAmount  = nf.parse(Application.formatNumber(getDueAmount())).doubleValue();
+
 			TransactionCompletionDialog dialog = TransactionCompletionDialog.getInstance();
 			dialog.setTickets(ticketsToSettle);
 			dialog.setTenderedAmount(tenderedAmount);
@@ -173,14 +176,14 @@ public abstract class PaymentView extends JPanel {
 			dialog.updateView();
 			dialog.pack();
 			dialog.open();
-			
+
 			if(dueAmount > 0.0) {
 				int option = JOptionPane.showConfirmDialog(Application.getPosWindow(), com.floreantpos.POSConstants.CONFIRM_PARTIAL_PAYMENT, com.floreantpos.POSConstants.MDS_POS, JOptionPane.YES_NO_OPTION);
 				if(option != JOptionPane.YES_OPTION) {
 					RootView.getInstance().showView(SwitchboardView.VIEW_NAME);
 					return;
 				}
-				
+
 				PaymentTypeSelectionDialog paymentTypeSelectionDialog = new PaymentTypeSelectionDialog();
 				paymentTypeSelectionDialog.setSize(250, 400);
 				paymentTypeSelectionDialog.open();
@@ -197,6 +200,6 @@ public abstract class PaymentView extends JPanel {
 			POSMessageDialog.showError(this, POSConstants.ERROR_MESSAGE, e);
 		}
 	}
-	
+
 	public abstract void updateView();
 }
