@@ -28,6 +28,8 @@ public abstract class BaseTicketItemModifier  implements Comparable, Serializabl
 	public static String PROP_TOTAL_AMOUNT = "totalAmount";
 	public static String PROP_ID = "id";
 	public static String PROP_MODIFIER_TYPE = "modifierType";
+    public static String PROP_SHOULD_PRINT_TO_BAR     = "shouldPrintToBar";
+    public static String PROP_PRINTED_TO_BAR          = "printedToBar";
 
 
 	// constructors
@@ -64,6 +66,8 @@ public abstract class BaseTicketItemModifier  implements Comparable, Serializabl
 	private java.lang.Double totalAmount;
 	private java.lang.Boolean shouldPrintToKitchen;
 	private java.lang.Boolean printedToKitchen;
+    private java.lang.Boolean shouldPrintToBar;
+    private java.lang.Boolean printedToBar;
 
 	// many to one
 	private com.floreantpos.model.TicketItemModifierGroup parent;
@@ -299,9 +303,48 @@ public abstract class BaseTicketItemModifier  implements Comparable, Serializabl
 	 */
 	public void setParent (com.floreantpos.model.TicketItemModifierGroup parent) {
 		this.parent = parent;
-	}
+    }
 
 
+
+    /**
+     * Return the value associated with the column: PRINT_TO_BAR
+     */
+    public java.lang.Boolean isShouldPrintToBar() {
+        return shouldPrintToBar == null ? Boolean.valueOf(true) : shouldPrintToBar;
+    }
+
+    /**
+     * Set the value related to the column: PRINT_TO_BAR
+     *
+     * @param shouldPrintToBar the PRINT_TO_BAR value
+     */
+    public void setShouldPrintToBar(java.lang.Boolean shouldPrintToBar) {
+        this.shouldPrintToBar = shouldPrintToBar;
+    }
+
+    /**
+     * Custom property
+     */
+    public static String getShouldPrintToBarDefaultValue() {
+        return "true";
+    }
+
+    /**
+     * Return the value associated with the column: PRINTED_TO_BAR
+     */
+    public java.lang.Boolean isPrintedToBar() {
+        return printedToBar == null ? Boolean.FALSE : printedToBar;
+    }
+
+    /**
+     * Set the value related to the column: PRINTED_TO_BAR
+     *
+     * @param printedToBar the PRINTED_TO_BAR value
+     */
+    public void setPrintedToBar(java.lang.Boolean printedToBar) {
+        this.printedToBar = printedToBar;
+    }
 
 
 
@@ -335,6 +378,4 @@ public abstract class BaseTicketItemModifier  implements Comparable, Serializabl
 	public String toString () {
 		return super.toString();
 	}
-
-
 }

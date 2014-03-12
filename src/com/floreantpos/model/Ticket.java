@@ -312,4 +312,33 @@ public class Ticket extends BaseTicket {
 
 		return false;
 	}
+
+    public boolean needsBarPrint() {
+        if (getDeletedItems() != null && getDeletedItems().size() > 0) {
+            return true;
+        }
+
+        List<TicketItem> ticketItems = getTicketItems();
+        for (TicketItem item : ticketItems) {
+            if (item.isShouldPrintToBar() && !item.isPrintedToBar()) {
+                return true;
+            }
+
+            List<TicketItemModifierGroup> modifierGroups = item.getTicketItemModifierGroups();
+            if (modifierGroups != null) {
+                for (TicketItemModifierGroup modifierGroup : modifierGroups) {
+                    List<TicketItemModifier> ticketItemModifiers = modifierGroup.getTicketItemModifiers();
+                    if (ticketItemModifiers != null) {
+                        for (TicketItemModifier modifier : ticketItemModifiers) {
+                            if (modifier.isShouldPrintToBar() && !modifier.isPrintedToBar()) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
 }

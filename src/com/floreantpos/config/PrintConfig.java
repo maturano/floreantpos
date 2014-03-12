@@ -14,12 +14,17 @@ public class PrintConfig {
 	public final static String P_PRINT_RECEIPT_WHEN_PAID = "PRINT_RECEIPT_WHEN_PAID";
 	public final static String P_PRINT_KITCHEN_WHEN_SETTELED = "PRINT_KITCHEN_WHEN_SETTELED";
 	public final static String P_PRINT_KITCHEN_WHEN_PAID = "PRINT_KITCHEN_WHEN_PAID";
+    public final static String P_BAR_PRINTER_TYPE            = "BAR_PRINTER_TYPE";
+    public final static String P_OS_PRINTER_FOR_BAR          = "BAR_OS_PRINTER_NAME";
+    public final static String P_JAVAPOS_PRINTER_FOR_BAR     = "BAR_JAVAPOS_PRINTER_NAME";
+    public final static String P_PRINT_BAR_WHEN_PAID         = "PRINT_BAR_WHEN_PAID";
+    public final static String P_PRINT_BAR_WHEN_SETTELED     = "PRINT_BAR_WHEN_SETTELED";
 
 	//	public static boolean printReceiptInOsPrinter() {
 	//		PrinterType printerType = PrinterType.fromString(ApplicationConfig.getString(P_RECEIPT_PRINTER_TYPE, PrinterType.OS_PRINTER.getName()));
 	//		return printerType == PrinterType.OS_PRINTER;
 	//	}
-	//	
+	//
 	//	public static boolean printKitchenInOsPrinter() {
 	//		PrinterType printerType = PrinterType.fromString(ApplicationConfig.getString(P_RECEIPT_PRINTER_TYPE, PrinterType.OS_PRINTER.getName()));
 	//		return printerType == PrinterType.OS_PRINTER;
@@ -68,4 +73,24 @@ public class PrintConfig {
 	public static boolean isPrintKitchenWhenPaid() {
 		return ApplicationConfig.getBoolean(P_PRINT_RECEIPT_WHEN_PAID, false);
 	}
+
+    public static String getOsBarPrinterName() {
+        return ApplicationConfig.getString(P_OS_PRINTER_FOR_BAR, "BarPrinter");
+    }
+
+    public static String getJavaPosBarPrinterName() {
+        return ApplicationConfig.getString(P_JAVAPOS_PRINTER_FOR_BAR, "BarPrinter");
+    }
+
+    public static PrinterType getBarPrinterType() {
+        return PrinterType.fromString(ApplicationConfig.getString(P_BAR_PRINTER_TYPE, PrinterType.OS_PRINTER.getName()));
+    }
+
+    public static boolean isPrintBarWhenSetteled() {
+        return ApplicationConfig.getBoolean(P_PRINT_BAR_WHEN_SETTELED, true);
+    }
+
+    public static boolean isPrintBarWhenPaid() {
+        return ApplicationConfig.getBoolean(P_PRINT_BAR_WHEN_PAID, false);
+    }
 }

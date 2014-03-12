@@ -17,7 +17,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with JasperReports. If not, see <http://www.gnu.org/licenses/>.
  */
@@ -55,8 +55,9 @@ import com.floreantpos.config.PrintConfig;
  */
 public class JRPrinterAWT implements Printable {
 	private static final Log log = LogFactory.getLog(JRPrinterAWT.class);
-	
+
 	public static boolean printToKitchen;
+    public static boolean printToBar;
 
 	/**
 	 *
@@ -202,12 +203,16 @@ public class JRPrinterAWT implements Printable {
 		try {
 			PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
 			PrintService printService = PrintServiceLookup.lookupDefaultPrintService();
-			
+
 			String printerName = PrintConfig.getOsReceiptPrinterName();
 			if(printToKitchen) {
 				printerName = PrintConfig.getOsKitchenPrinterName();
 			}
-			
+
+            if (printToBar) {
+                printerName = PrintConfig.getOsBarPrinterName();
+            }
+
 			for (int i = 0; i < printServices.length; i++) {
 				PrintService service = printServices[i];
 				if(service.getName().equals(printerName)) {
@@ -215,9 +220,9 @@ public class JRPrinterAWT implements Printable {
 					break;
 				}
 			}
-			
+
 			job.setPrintService(printService);
-			printToKitchen = false;
+            printToBar = printToKitchen = false;
 		} catch (PrinterException e) {
 		}
 	}

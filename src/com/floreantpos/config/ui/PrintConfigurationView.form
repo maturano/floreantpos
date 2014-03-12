@@ -23,6 +23,7 @@
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
                           <Component id="jPanel1" alignment="0" max="32767" attributes="1"/>
                           <Component id="jPanel2" alignment="0" max="32767" attributes="1"/>
+                          <Component id="jPanel3" alignment="0" max="32767" attributes="1"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -32,6 +33,8 @@
                           <Component id="chkPrintReceiptWhenTicketPaid" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="chkPrintKitchenWhenTicketSettled" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="chkPrintKitchenWhenTicketPaid" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkPrintBarWhenTicketSettled" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="chkPrintBarWhenTicketPaid" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -47,6 +50,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
+              <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="chkPrintReceiptWhenTicketSettled" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="chkPrintReceiptWhenTicketPaid" min="-2" max="-2" attributes="0"/>
@@ -54,6 +59,10 @@
               <Component id="chkPrintKitchenWhenTicketSettled" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="chkPrintKitchenWhenTicketPaid" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="chkPrintBarWhenTicketSettled" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="chkPrintBarWhenTicketPaid" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -286,6 +295,113 @@
           </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="lblSelectKitchenPrinter">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Select Printer:"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JCheckBox" name="chkPrintBarWhenTicketSettled">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Print to bar when ticket settled"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="chkPrintBarWhenTicketPaid">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Print to bar when ticket paid"/>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JPanel" name="jPanel3">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder justification="1" position="2" title="Bar Printer"/>
+          </Border>
+        </Property>
+      </Properties>
+
+      <Layout>
+        <DimensionLayout dim="0">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Group type="102" alignment="0" attributes="1">
+                          <Component id="lblBarPrinterName" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="tfBarPrinterName" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="cbBarPrinterType" min="-2" pref="182" max="-2" attributes="1"/>
+                      </Group>
+                  </Group>
+                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <Component id="lblSelectBarPrinter" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="cbBarPrinterName" pref="183" max="32767" attributes="1"/>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+        <DimensionLayout dim="1">
+          <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbBarPrinterType" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblSelectBarPrinter" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbBarPrinterName" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="lblBarPrinterName" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="tfBarPrinterName" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+              </Group>
+          </Group>
+        </DimensionLayout>
+      </Layout>
+      <SubComponents>
+        <Component class="javax.swing.JLabel" name="lblBarPrinterName">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Printer name:"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="tfBarPrinterName">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="BarPrinter"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="cbBarPrinterName">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="cbBarPrinterType">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="0"/>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="barPrinterTypeSelectionChanged"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabel3">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Printer Type:"/>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_VariableLocal" type="java.lang.Boolean" value="true"/>
+            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+          </AuxValues>
+        </Component>
+        <Component class="javax.swing.JLabel" name="lblSelectBarPrinter">
           <Properties>
             <Property name="text" type="java.lang.String" value="Select Printer:"/>
           </Properties>

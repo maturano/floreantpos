@@ -1,9 +1,3 @@
-/*
- * TicketView.java
- *
- * Created on August 4, 2006, 3:42 PM
- */
-
 package com.floreantpos.ui.views.order;
 
 import java.awt.event.MouseAdapter;
@@ -364,7 +358,16 @@ public class TicketView extends JPanel {
 				ticket.clearDeletedItems();
 				OrderController.saveOrder(ticket);
 			}
-			RootView.getInstance().showView(SwitchboardView.VIEW_NAME);
+
+            if (PrintConfig.isPrintBarWhenSetteled()) {
+                if (ticket.needsBarPrint()) {
+                    PosPrintService.printToBar(ticket);
+                }
+                ticket.clearDeletedItems();
+                OrderController.saveOrder(ticket);
+            }
+
+            RootView.getInstance().showView(SwitchboardView.VIEW_NAME);
 		} catch (PosException x) {
 			POSMessageDialog.showError(x.getMessage());
 		} catch (Exception e) {

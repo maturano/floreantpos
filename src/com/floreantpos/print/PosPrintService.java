@@ -30,7 +30,7 @@ import foxtrot.Worker;
 
 public class PosPrintService {
 	private static Log logger = LogFactory.getLog(PosPrintService.class);
-	
+
 	static int firstColumnLength = 4;
 	static int secondColumnLength = 16;
 	static int thirdColumnLength = 8;
@@ -41,6 +41,9 @@ public class PosPrintService {
 	static int kitchenFirstColumnLength = 4;
 	static int kitchenSecondColumnLength = 24;
 	static int kitchenThirdColumnLength = 8;
+    static int barFirstColumnLength      =  4;
+    static int barSecondColumnLength     = 24;
+    static int barThirdColumnLength      =  8;
 
 	static void printCentered(PosPrinter printer, String text) {
 		int blank = totalLength - text.length();
@@ -195,7 +198,7 @@ public class PosPrintService {
 						JReportPrintService.printTicket(ticket);
 						return null;
 					}
-				
+
 					Restaurant restaurant = RestaurantDAO.getInstance().get(Integer.valueOf(1));
 
 					posPrinter = new PosPrinter(PrintConfig.getJavaPosReceiptPrinterName(), PrintConfig.getCashDrawerName());
@@ -358,10 +361,10 @@ public class PosPrintService {
 				return null;
 			}
 		};
-		
+
 		Worker.post(job);
 	}
-	
+
 	public static void printToKitchen(final Ticket ticket) throws Exception {
 		Job job = new Job() {
 
@@ -373,7 +376,7 @@ public class PosPrintService {
 						JReportPrintService.printTicketToKitchen(ticket);
 						return null;
 					}
-				
+
 					Restaurant restaurant = RestaurantDAO.getInstance().get(Integer.valueOf(1));
 
 					posPrinter = new PosPrinter(PrintConfig.getJavaPosKitchenPrinterName(), PrintConfig.getCashDrawerName());
@@ -469,11 +472,113 @@ public class PosPrintService {
 				}
 				return null;
 			}
-			
+
 		};
-		
+
 		Worker.post(job);
 	}
+
+    public static void printToBar(final Ticket ticket) throws Exception {
+        Job job = new Job() {
+
+            @Override
+            public Object run() {
+                PosPrinter posPrinter = null;
+                try {
+                    if(PrintConfig.getBarPrinterType() == PrinterType.OS_PRINTER) {
+                        JReportPrintService.printTicketToBar(ticket);
+                        return null;
+                    }
+
+                    Restaurant restaurant = RestaurantDAO.getInstance().get(Integer.valueOf(1));
+
+                    posPrinter = new PosPrinter(PrintConfig.getJavaPosBarPrinterName(), PrintConfig.getCashDrawerName());
+
+                    posPrinter.beginLine(PosPrinter.SIZE_0);
+                    posPrinter.printText("\u001b|cA\u001b|2C" + restaurant.getName());
+                    posPrinter.endLine();
+
+                    posPrinter.beginLine(PosPrinter.SIZE_0);
+                    posPrinter.printText("Ticket #" + ticket.getId());
+                    posPrinter.endLine();
+
+                    posPrinter.beginLine(PosPrinter.SIZE_0);
+                    posPrinter.printText(com.floreantpos.POSConstants.SRV_);
+                    posPrinter.printText(String.valueOf(ticket.getOwner().getUserId() + "/" + ticket.getOwner()));
+                    posPrinter.endLine();
+
+                    posPrinter.beginLine(PosPrinter.SIZE_0);
+                    posPrinter.printText(com.floreantpos.POSConstants.DATE + ": ");
+                    posPrinter.printText(Application.formatDate(new Date()));
+                    posPrinter.endLine();
+
+                    posPrinter.printEmptyLine();
+
+                    posPrinter.beginLine(PosPrinter.SIZE_0);
+                    printFirstColumn(posPrinter,  "ITEM#",     barFirstColumnLength);
+                    printSecondColumn(posPrinter, "ITEM NAME", barFirstColumnLength, barSecondColumnLength, false);
+                    printFourthColumn(posPrinter, "UNIT",      barThirdColumnLength);
+                    posPrinter.endLine();
+
+                    List<TicketItem> ticketItems = ticket.getTicketItems();
+                    for (TicketItem ticketItem : ticketItems) {
+                        if (ticketItem.isShouldPrintToBar() && !ticketItem.isPrintedToBar()) {
+                            printItemToBar(posPrinter, ticketItem);
+                            ticketItem.setPrintedToBar(true);
+                        }
+
+                        List<TicketItemModifierGroup> ticketItemModifierGroups = ticketItem.getTicketItemModifierGroups();
+                        if (ticketItemModifierGroups != null) {
+                            for (TicketItemModifierGroup modifierGroup : ticketItemModifierGroups) {
+                                List<TicketItemModifier> ticketItemModifiers = modifierGroup.getTicketItemModifiers();
+                                if (ticketItemModifiers != null) {
+                                    for (TicketItemModifier modifier : ticketItemModifiers) {
+                                        if (modifier.isShouldPrintToBar() && !modifier.isPrintedToBar()) {
+                                            printModifierToBar(posPrinter, modifier);
+                                            modifier.setPrintedToBar(true);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    posPrinter.printEmptyLine();
+
+                    if (ticket.getDeletedItems() != null) {
+                        List deletedItems = ticket.getDeletedItems();
+                        for (Object object : deletedItems) {
+                            if (object instanceof TicketItem) {
+                                TicketItem item = (TicketItem) object;
+                                if (item.isShouldPrintToBar()) {
+                                    printDeletedItem(posPrinter, item.getId());
+                                }
+                            } else if (object instanceof TicketItemModifier) {
+                                TicketItemModifier ticketItemModifier = (TicketItemModifier) object;
+                                if (ticketItemModifier.isShouldPrintToBar()) {
+                                    printDeletedItem(posPrinter, ticketItemModifier.getId());
+                                }
+                            }
+                        }
+                    }
+
+                    posPrinter.printCutPartial();
+
+                } catch(Exception x) {
+                    logger.error("ERROR mientras se imprimía a Bar ", x);
+
+                } finally {
+                    if (posPrinter != null) {
+                        posPrinter.finalize();
+                    }
+                }
+
+                return null;
+            }
+        };
+
+        Worker.post(job);
+    }
 
 	public static void printVoidInfo(Ticket ticket) throws Exception {
 		PosPrinter posPrinter = null;
@@ -534,6 +639,22 @@ public class PosPrintService {
 		printFourthColumn(posPrinter, String.valueOf(modifier.getItemCount()), kitchenThirdColumnLength);
 		posPrinter.endLine();
 	}
+
+    private static void printItemToBar(PosPrinter posPrinter, TicketItem ticketItem) {
+        posPrinter.beginLine(PosPrinter.SIZE_0);
+        printFirstColumn(posPrinter, String.valueOf(ticketItem.getId()), barFirstColumnLength);
+        printSecondColumn(posPrinter, ticketItem.getName(), barFirstColumnLength, barSecondColumnLength, false);
+        printFourthColumn(posPrinter, String.valueOf(ticketItem.getItemCount()), barThirdColumnLength);
+        posPrinter.endLine();
+    }
+
+    private static void printModifierToBar(PosPrinter posPrinter, TicketItemModifier modifier) {
+        posPrinter.beginLine(PosPrinter.SIZE_0);
+        printFirstColumn(posPrinter, String.valueOf(modifier.getId()), barFirstColumnLength);
+        printSecondColumn(posPrinter, " - " + modifier.getName(), barFirstColumnLength, barSecondColumnLength, false);
+        printFourthColumn(posPrinter, String.valueOf(modifier.getItemCount()), barThirdColumnLength);
+        posPrinter.endLine();
+    }
 
 	static void printDrawerPullLine(PosPrinter printer, String firstColumn, String secondColumn) {
 		printer.beginLine(PosPrinter.SIZE_0);
@@ -609,7 +730,7 @@ public class PosPrintService {
 			printColumnSeparator(posPrinter);
 			printColumn(posPrinter, "AMOUNT", 7);
 			posPrinter.endLine();
-			
+
 			Set<DrawerPullVoidTicketEntry> voidTickets = drawerPullReport.getVoidTickets();
 			if (voidTickets != null) {
 				for (DrawerPullVoidTicketEntry entry : voidTickets) {
@@ -632,7 +753,7 @@ public class PosPrintService {
 			printColumnSeparator(posPrinter);
 			printRightAlignedColumn(posPrinter, decimalFormat.format(drawerPullReport.getTotalVoid()), 15);
 			posPrinter.endLine();
-			
+
 			posPrinter.printEmptyLine();
 			printLastColumn(posPrinter, "TOTAL DISCOUNT", 25);
 			printDiscountLine(posPrinter, "TOTAL COUNT", String.valueOf(drawerPullReport.getTotalDiscountCount()));
@@ -643,7 +764,7 @@ public class PosPrintService {
 			printDiscountLine(posPrinter, "Check Size", String.valueOf(drawerPullReport.getTotalDiscountCheckSize()));
 			printDiscountLine(posPrinter, "Count [%]", String.valueOf(" "));
 			printDiscountLine(posPrinter, "Ration", String.valueOf(" "));
-			
+
 			posPrinter.printCutPartial();
 		} finally {
 			if (posPrinter != null) {
@@ -786,7 +907,7 @@ public class PosPrintService {
 			else {
 				posPrinter.printText("Cash");
 			}
-			
+
 			posPrinter.endLine();
 
 			posPrinter.beginLine(PosPrinter.SIZE_0);
@@ -810,12 +931,12 @@ public class PosPrintService {
 			posPrinter.printText("Subtotal: ");
 			posPrinter.printText(Application.formatNumber(ticket.getSubtotalAmount()));
 			posPrinter.endLine();
-			
+
 			posPrinter.beginLine(PosPrinter.SIZE_0);
 			posPrinter.printText("Discount: ");
 			posPrinter.printText(Application.formatNumber(ticket.getDiscountAmount()));
 			posPrinter.endLine();
-			
+
 			posPrinter.beginLine(PosPrinter.SIZE_0);
 			posPrinter.printText("Tax: ");
 			posPrinter.printText(Application.formatNumber(ticket.getTaxAmount()));
@@ -827,7 +948,7 @@ public class PosPrintService {
 				posPrinter.printText("Tip: ");
 				posPrinter.printText(Application.formatNumber(ticket.getGratuity().getAmount()));
 				posPrinter.endLine();
-				
+
 				totalAmount += ticket.getGratuity().getAmount();
 			}
 			posPrinter.beginLine(PosPrinter.SIZE_0);

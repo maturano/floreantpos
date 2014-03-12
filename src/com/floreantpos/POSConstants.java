@@ -311,6 +311,11 @@ public class POSConstants {
 	public static final String DATABASE_CONNECTION_ERROR = Messages.getString("PosMessage.307"); //$NON-NLS-1$
 	public static final String NEW_MENU_CATEGORY = Messages.getString("PosMessage.308"); //$NON-NLS-1$
 	public static final String PERCENTAGE = Messages.getString("PosMessage.309"); //$NON-NLS-1$
+    public static final String PRINT_TO_BAR = Messages.getString("PosMessage.313"); //$NON-NLS-1$
+    public static final String PRINT_TO_BAR_WHEN_TICKET_PAID = Messages.getString("PosMessage.314"); //$NON-NLS-1$
+    public static final String PRINT_TO_BAR_WHEN_TICKET_SETTLED = Messages.getString("PosMessage.315"); //$NON-NLS-1$
+    public static final String BAR_PRINTER = Messages.getString("PosMessage.316"); //$NON-NLS-1$
+    public static final String KITCHEN_PRINTER = Messages.getString("PosMessage.317"); //$NON-NLS-1$
 	public static final String WELCOME = Messages.getString("Switchboard.0"); //$NON-NLS-1$
 	public static final String OPEN_TICKETS_AND_ACTIVITY = Messages.getString("Switchboard.1"); //$NON-NLS-1$
 	public static final String TICKETS = Messages.getString("Switchboard.2"); //$NON-NLS-1$

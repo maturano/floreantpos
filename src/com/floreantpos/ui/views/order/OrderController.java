@@ -68,9 +68,11 @@ public class OrderController implements OrderListener, CategorySelectionListener
 		if (menuItem.getParent().getParent().isBeverage()) {
 			ticketItem.setBeverage(true);
 			ticketItem.setShouldPrintToKitchen(false);
+            ticketItem.setShouldPrintToBar(true);
 		} else {
 			ticketItem.setBeverage(false);
 			ticketItem.setShouldPrintToKitchen(true);
+            ticketItem.setShouldPrintToBar(false);
 		}
 		orderView.getTicketView().addTicketItem(ticketItem);
 
@@ -96,7 +98,7 @@ public class OrderController implements OrderListener, CategorySelectionListener
 		//		itemModifier.setMinQuantity(modifier.getMinQuantity());
 		//		itemModifier.setMaxQuantity(modifier.getMaxQuantity());
 		//		itemModifier.setTaxRate(modifier.getTax() == null ? 0 : modifier.getTax().getRate());
-		//		
+		//
 		//		orderView.getTicketView().addModifier(itemModifier);
 	}
 

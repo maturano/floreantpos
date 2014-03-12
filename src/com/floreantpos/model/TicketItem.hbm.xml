@@ -29,6 +29,10 @@
     <property column="HAS_MODIIERS" name="hasModifiers" type="java.lang.Boolean"/>
     <!--to keep track whether this item is printed-->
     <property column="PRINTED_TO_KITCHEN" name="printedToKitchen" type="java.lang.Boolean"/>
+    <property column="PRINT_TO_BAR" name="shouldPrintToBar" type="java.lang.Boolean">
+        <meta attribute="defaultValue">true</meta>
+    </property>
+    <property column="PRINTED_TO_BAR" name="printedToBar" type="java.lang.Boolean"/>
     <list cascade="all" inverse="false" lazy="true" name="ticketItemModifierGroups">
       <key>
         <column name="TICKETITEM_ID"/>
@@ -39,7 +43,7 @@
     <!-- list name="modifiers" inverse="false" cascade="all" lazy="false">
 			<key column="TICKET_ITEM_ID"/>
 			<list-index column="INDEX_ORDER"/>
-			
+
 			<one-to-many class="TicketItemModifier"/>
 		</list-->
     <many-to-one class="com.floreantpos.model.Ticket" name="ticket" not-null="true">
