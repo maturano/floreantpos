@@ -32,4 +32,5 @@ public class ActionHistory extends BaseActionHistory {
 	public final static String GROUP_SETTLE = "GROUP SETTLE";//added
 	public final static String PAY_OUT = "PAY OUT";//added
 	public final static String PAY_TIPS = "PAY TIPS";//added
+    public final static String REFRESH_TICKET_LIST = "REFRESH TICKET LIST";//added
 }

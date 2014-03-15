@@ -354,6 +354,7 @@ public class POSConstants {
 	public static final String CAPITAL_TAKE_OUT = Messages.getString("Switchboard.34"); //$NON-NLS-1$
 	public static final String CAPITAL_PAY_OUT = Messages.getString("Switchboard.35"); //$NON-NLS-1$
 	public static final String CAPITAL_GROUP = Messages.getString("Switchboard.36"); //$NON-NLS-1$
+    public static final String CAPITAL_REFRESH = Messages.getString("Switchboard.38"); //$NON-NLS-1$
 	public static final String INVALID_NUMBER = Messages.getString("PosMessage.310"); //$NON-NLS-1$
 	public static final String CAPITAL_COOKING_INSTRUCTIONS = Messages.getString("PosMessage.311"); //$NON-NLS-1$
 	public static final String CAPITAL_BACK = Messages.getString("SelectionView.0"); //$NON-NLS-1$

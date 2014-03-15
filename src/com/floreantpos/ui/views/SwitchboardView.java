@@ -66,6 +66,7 @@ public class SwitchboardView extends JPanel implements ActionListener {
 		btnSplitTicket.addActionListener(this);
 		btnTakeout.addActionListener(this);
 		btnVoidTicket.addActionListener(this);
+        btnRefresh.addActionListener(this);
 
 		ticketListUpdater = new Timer(30 * 1000, new TicketListUpdaterTask());
 	}
@@ -102,6 +103,7 @@ public class SwitchboardView extends JPanel implements ActionListener {
 		btnBackOffice = new com.floreantpos.swing.PosButton();
 		btnManager = new com.floreantpos.swing.PosButton();
 		btnClockOut = new com.floreantpos.swing.PosButton();
+        btnRefresh  = new com.floreantpos.swing.PosButton();
 
 		setLayout(new java.awt.BorderLayout());
 
@@ -199,24 +201,63 @@ public class SwitchboardView extends JPanel implements ActionListener {
 		btnManager.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/user_32.png")));
 		btnManager.setText(POSConstants.CAPITAL_MANAGER);
 
+        btnRefresh.setText(POSConstants.CAPITAL_REFRESH);
+
 		btnClockOut.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/log_out_32.png")));
 		btnClockOut.setText(POSConstants.CAPITAL_CLOCK_OUT);
 
-		org.jdesktop.layout.GroupLayout bottomRightPanelLayout = new org.jdesktop.layout.GroupLayout(bottomRightPanel);
-		bottomRightPanel.setLayout(bottomRightPanelLayout);
-		bottomRightPanelLayout.setHorizontalGroup(bottomRightPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-				bottomRightPanelLayout.createSequentialGroup().addContainerGap().add(
-						bottomRightPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(btnShutdown, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE).add(btnLogout, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE).add(btnClockOut,
-								org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 168, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(btnBackOffice, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE).add(btnManager, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE))
-						.addContainerGap()));
-		bottomRightPanelLayout.setVerticalGroup(bottomRightPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-				org.jdesktop.layout.GroupLayout.TRAILING,
-				bottomRightPanelLayout.createSequentialGroup().addContainerGap(39, Short.MAX_VALUE).add(btnManager, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(
-						btnBackOffice, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(btnClockOut, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(btnLogout, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-						org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(btnShutdown, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 58, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).addContainerGap()));
+        org.jdesktop.layout.GroupLayout bottomRightPanelLayout = new org.jdesktop.layout.GroupLayout(bottomRightPanel);
+        bottomRightPanel.setLayout(bottomRightPanelLayout);
 
-		bottomRightPanelLayout.linkSize(new java.awt.Component[] { btnBackOffice, btnClockOut, btnLogout, btnManager, btnShutdown }, org.jdesktop.layout.GroupLayout.VERTICAL);
+        bottomRightPanelLayout.setHorizontalGroup(
+            bottomRightPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
+                bottomRightPanelLayout.createSequentialGroup().addContainerGap().add(
+                    bottomRightPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                        .add(btnShutdown,   org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,   168, Short.MAX_VALUE)
+                        .add(btnLogout,     org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,   168, Short.MAX_VALUE)
+                        .add(btnClockOut,   org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 168, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(btnBackOffice, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,   168, Short.MAX_VALUE)
+                        .add(btnManager,    org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,   168, Short.MAX_VALUE)
+                        .add(btnRefresh,    org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,   168, Short.MAX_VALUE)
+                    )
+                .addContainerGap()
+            )
+        );
+
+        bottomRightPanelLayout.setVerticalGroup(
+            bottomRightPanelLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
+                org.jdesktop.layout.GroupLayout.TRAILING, bottomRightPanelLayout.createSequentialGroup().addContainerGap(39, Short.MAX_VALUE)
+                    .add(btnRefresh, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+
+                    .add(btnManager, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+
+                    .add(btnBackOffice, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+
+                    .add(btnClockOut, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+
+                    .add(btnLogout, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+
+                    .add(btnShutdown, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 58, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+            )
+        );
+
+        bottomRightPanelLayout.linkSize(
+            new java.awt.Component[] {
+                btnBackOffice,
+                btnClockOut,
+                btnLogout,
+                btnManager,
+                btnShutdown,
+                btnRefresh
+            },
+            org.jdesktop.layout.GroupLayout.VERTICAL
+        );
 
 		bottomPanel.add(bottomRightPanel, java.awt.BorderLayout.EAST);
 
@@ -575,6 +616,11 @@ public class SwitchboardView extends JPanel implements ActionListener {
 		}
 	}
 
+    private void doRefresh() {
+        ActionHistoryDAO.getInstance().saveHistory(Application.getCurrentUser(), ActionHistory.REFRESH_TICKET_LIST, "Update ticket list");
+        updateTicketList();
+    }
+
 	public void updateView() {
 		User user = Application.getCurrentUser();
 		UserType userType = user.getNewUserType();
@@ -684,6 +730,7 @@ public class SwitchboardView extends JPanel implements ActionListener {
 	private com.floreantpos.swing.PosButton btnVoidTicket;
 	private javax.swing.JLabel lblUserName;
 	private com.floreantpos.ui.TicketListView openTicketList;
+    private com.floreantpos.swing.PosButton btnRefresh;
 
 	// End of variables declaration//GEN-END:variables
 
@@ -750,6 +797,9 @@ public class SwitchboardView extends JPanel implements ActionListener {
 		if (source == btnVoidTicket) {
 			doVoidTicket();
 		}
+        if (source == btnRefresh) {
+            doRefresh();
+        }
 	}
 
 	private class TicketListUpdaterTask implements ActionListener {
