@@ -22,10 +22,9 @@ import com.floreantpos.config.ApplicationConfig;
 import com.floreantpos.ui.TitlePanel;
 import com.floreantpos.ui.dialog.POSDialog;
 import com.floreantpos.ui.dialog.POSMessageDialog;
-import com.floreantpos.ui.views.PasswordScreen;
 
 public class DatabaseConfigurationDialog extends POSDialog implements ActionListener {
-	
+
 	private static final String CLOSE = "close";
 	private static final String SAVE = "save";
 	private static final String TEST = "test";
@@ -37,9 +36,9 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 	private JButton btnTestConnection;
 	private JButton btnFinish;
 	private JButton btnExit;
-	
+
 	private TitlePanel titlePanel;
-	
+
 	private boolean exitOnClose;
 
 	public DatabaseConfigurationDialog() throws HeadlessException {
@@ -61,10 +60,10 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 	public DatabaseConfigurationDialog(Frame owner, boolean modal) throws HeadlessException {
 		super(owner, modal);
 	}
-	
+
 	protected void initUI() {
 		setLayout(new MigLayout("fill","[][fill, grow]",""));
-	
+
 		titlePanel = new TitlePanel();
 		tfServerAddress = new JTextField();
 		tfServerPort = new JTextField();
@@ -73,7 +72,7 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 		tfPassword = new JPasswordField();
 
 		add(titlePanel, "span, grow, wrap");
-		
+
 		add(new JLabel("Database Server Address" + ":"));
 		add(tfServerAddress, "grow, wrap");
 		add(new JLabel("Database Server Port" + ":"));
@@ -85,41 +84,41 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 		add(new JLabel("Database Password" + ":"));
 		add(tfPassword, "grow, wrap");
 		add(new JSeparator(),"span, grow, gaptop 10");
-		
+
 		btnTestConnection = new JButton("Test Connection");
 		btnTestConnection.setActionCommand(TEST);
 		btnFinish = new JButton(POSConstants.SAVE);
 		btnFinish.setActionCommand(SAVE);
 		btnExit = new JButton(POSConstants.CLOSE);
 		btnExit.setActionCommand(CLOSE);
-		
+
 		JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 		buttonPanel.add(btnTestConnection);
 		buttonPanel.add(btnFinish);
 		buttonPanel.add(btnExit);
-		
+
 		add(buttonPanel, "span, grow");
-		
+
 		btnTestConnection.addActionListener(this);
 		btnFinish.addActionListener(this);
 		btnExit.addActionListener(this);
-		
+
 		tfServerAddress.setText(ApplicationConfig.getDatabaseURL());
 		tfServerPort.setText(ApplicationConfig.getDatabasePort());
 		tfDatabaseName.setText(ApplicationConfig.getDatabaseName());
 		tfUserName.setText(ApplicationConfig.getDatabaseUser());
 		tfPassword.setText(ApplicationConfig.getDatabasePassword());
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
-		
+
 		String databaseURL = tfServerAddress.getText();
 		String databasePort = tfServerPort.getText();
 		String databaseName = tfDatabaseName.getText();
 		String user = tfUserName.getText();
 		String pass = new String(tfPassword.getPassword());
-		
+
 		if(TEST.equalsIgnoreCase(command)) {
 			if(ApplicationConfig.checkDatabaseConnection(databaseURL, databasePort, databaseName, user, pass)) {
 				JOptionPane.showMessageDialog(this, "Connection Successfull!");
@@ -135,7 +134,6 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 				ApplicationConfig.setDatabaseName(databaseName);
 				ApplicationConfig.setDatabaseUser(user);
 				ApplicationConfig.setDatabasePassword(pass);
-				PasswordScreen.getInstance().setUserTypes();
 				dispose();
 			}
 			else {
@@ -160,10 +158,10 @@ public class DatabaseConfigurationDialog extends POSDialog implements ActionList
 	public void setExitOnClose(boolean exitOnClose) {
 		this.exitOnClose = exitOnClose;
 	}
-	
+
 	public void setTitle(String title) {
 		super.setTitle("Configure database");
-		
+
 		titlePanel.setTitle(title);
 	}
 }

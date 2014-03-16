@@ -36,7 +36,6 @@ import com.floreantpos.swing.GlassPane;
 import com.floreantpos.swing.TransparentPanel;
 import com.floreantpos.ui.dialog.NumberSelectionDialog;
 import com.floreantpos.ui.views.LoginScreen;
-import com.floreantpos.ui.views.PasswordScreen;
 import com.floreantpos.ui.views.order.RootView;
 import com.floreantpos.util.TicketActiveDateSetterTask;
 import com.jgoodies.looks.plastic.PlasticXPLookAndFeel;
@@ -46,7 +45,7 @@ public class Application {
 	private static Log logger = LogFactory.getLog(Application.class);
 
 	private Timer autoDrawerPullTimer;
-	
+
 	private Terminal terminal;
 	private PosWindow posWindow;
 	private User currentUser;
@@ -73,7 +72,7 @@ public class Application {
 		posWindow.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				shutdownPOS();
-				
+
 			}
 		});
 	}
@@ -112,7 +111,7 @@ public class Application {
 			dialog.pack();
 			dialog.open();
 		}
-		
+
 
 		try {
 			((GlassPane) posWindow.getGlassPane()).setMessage(com.floreantpos.POSConstants.LOADING);
@@ -146,24 +145,22 @@ public class Application {
 			if(printConfiguration == null) {
 				printConfiguration = new PrinterConfiguration();
 			}
-			
+
 			refreshRestaurant();
-			
-			PasswordScreen.getInstance().setUserTypes();
-			
+
 			Calendar calendar = Calendar.getInstance();
 			calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
 			calendar.set(Calendar.HOUR_OF_DAY, 0);
 			calendar.set(Calendar.MINUTE, 0);
 			calendar.set(Calendar.SECOND, 0);
-			
+
 			//SimpleDateFormat format = new SimpleDateFormat("yyyy MMM dd HH:mm:s a");
 			Date time = calendar.getTime();
 			//System.out.println("expected next launch: " + format.format(time));
 
 			TicketActiveDateSetterTask ticketActiveDateSetterTask = new TicketActiveDateSetterTask();
 			ticketActiveDateSetterTask.run();
-			
+
 			java.util.Timer activeDateScheduler = new java.util.Timer();
 			activeDateScheduler.scheduleAtFixedRate(ticketActiveDateSetterTask, time, 86400*1000);
 		} finally {
@@ -185,7 +182,7 @@ public class Application {
 			}
 		}
 	}
-	
+
 	public static String getCurrencyName() {
 		Application application = getInstance();
 		if(application.restaurant == null) {
@@ -215,7 +212,7 @@ public class Application {
 		if(option != JOptionPane.YES_OPTION) {
 			return;
 		}
-		
+
 		int width = posWindow.getWidth();
 		int height = posWindow.getHeight();
 		ApplicationConfig.getPreferences().putInt("wwidth", width);
@@ -268,7 +265,7 @@ public class Application {
 	}
 
 	public Terminal getTerminal() {
-		
+
 		TerminalDAO.getInstance().refresh(terminal);
 
 		return terminal;
@@ -313,7 +310,7 @@ public class Application {
 	public void setCurrentShift(Shift currentShift) {
 		this.currentShift = currentShift;
 	}
-	
+
 	public void setAutoDrawerPullEnable(boolean enable) {
 		if(enable) {
 			if(autoDrawerPullTimer != null) {

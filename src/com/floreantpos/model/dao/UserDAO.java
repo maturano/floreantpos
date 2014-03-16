@@ -17,7 +17,6 @@ import com.floreantpos.model.Shift;
 import com.floreantpos.model.Terminal;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.User;
-import com.floreantpos.model.UserType;
 
 public class UserDAO extends BaseUserDAO {
 	public final static UserDAO instance = new UserDAO();
@@ -28,61 +27,26 @@ public class UserDAO extends BaseUserDAO {
 	public UserDAO() {
 	}
 
-	public User findUser(int id) {
-		Session session = null;
-		
-		try {
-			session = getSession();
-			Criteria criteria = session.createCriteria(getReferenceClass());
-			criteria.add(Restrictions.eq(User.PROP_USER_ID, id));
-			
-			List list = criteria.list();
-			if(list.size() > 0) {
-				return (User) list.get(0);
-			}
-			return null;
-		} finally {
-			if (session != null) {
-				closeSession(session);
-			}
-		}
-	}
-//	public User findUser(int id, String type) {
-//		Session session = null;
-//
-//		try {
-//			session = getSession();
-//			Criteria criteria = session.createCriteria(getReferenceClass());
-//			criteria.add(Restrictions.eq(User.PROP_USER_ID, id));
-//			criteria.add(Restrictions.eq(User.PROP_USER_TYPE, type));
-//
-//			return (User) criteria.uniqueResult();
-//		} finally {
-//			if (session != null) {
-//				closeSession(session);
-//			}
-//		}
-//	}
-	public User findUser(int id, UserType userType) {
-		Session session = null;
-		
-		try {
-			session = getSession();
-			Criteria criteria = session.createCriteria(getReferenceClass());
-			criteria.add(Restrictions.eq(User.PROP_USER_ID, id));
-			criteria.add(Restrictions.eq(User.PROP_NEW_USER_TYPE, userType));
-			
-			return (User) criteria.uniqueResult();
-		} finally {
-			if (session != null) {
-				closeSession(session);
-			}
-		}
-	}
-	
+    public User findUser(int id) {
+        Session session = null;
+
+        try {
+            session = getSession();
+            Criteria criteria = session.createCriteria(getReferenceClass());
+            criteria.add(Restrictions.eq(User.PROP_USER_ID, id));
+
+            return (User) criteria.uniqueResult();
+
+        } finally {
+            if (session != null) {
+                closeSession(session);
+            }
+        }
+    }
+
 	public Integer findUserWithMaxId() {
 		Session session = null;
-		
+
 		try {
 			session = getSession();
 			Criteria criteria = session.createCriteria(getReferenceClass());
@@ -92,7 +56,7 @@ public class UserDAO extends BaseUserDAO {
 			if(list != null && list.size() > 0) {
 				return (Integer) list.get(0);
 			}
-			
+
 			return null;
 		} finally {
 			if (session != null) {
@@ -186,7 +150,7 @@ public class UserDAO extends BaseUserDAO {
 		Query query = session.createQuery(hql);
 		query = query.setParameter("userId", user.getUserId());
 		query = query.setParameter("userType", user.getNewUserType());
-		
+
 		if (query.list().size() > 0) {
 			throw new PosException("Another user with same ID already exists");
 		}
@@ -213,9 +177,9 @@ public class UserDAO extends BaseUserDAO {
 	// public User findByPassword(String password) throws PosException {
 	// Session session = null;
 	// Transaction tx = null;
-	//		
+	//
 	// String hql = "from User u where u.password=:password";
-	//		
+	//
 	// try {
 	// session = getSession();
 	// tx = session.beginTransaction();
@@ -275,5 +239,4 @@ public class UserDAO extends BaseUserDAO {
 			}
 		}
 	}
-
 }
