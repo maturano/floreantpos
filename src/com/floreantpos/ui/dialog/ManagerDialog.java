@@ -1,9 +1,3 @@
-/*
- * ManagerDialog.java
- *
- * Created on September 2, 2006, 1:27 AM
- */
-
 package com.floreantpos.ui.dialog;
 
 import java.awt.Dimension;
@@ -22,9 +16,11 @@ import net.miginfocom.swing.MigLayout;
 import org.jdesktop.swingx.JXDatePicker;
 
 import com.floreantpos.main.Application;
+import com.floreantpos.model.Terminal;
 import com.floreantpos.model.TipsCashoutReport;
 import com.floreantpos.model.User;
 import com.floreantpos.model.dao.GratuityDAO;
+import com.floreantpos.model.dao.TerminalDAO;
 import com.floreantpos.model.dao.UserDAO;
 import com.floreantpos.swing.GlassPane;
 import com.floreantpos.swing.ListComboBoxModel;
@@ -38,23 +34,23 @@ import foxtrot.Worker;
  */
 public class ManagerDialog extends JFrame {
 	private GlassPane glassPane;
-	
+
     /** Creates new form ManagerDialog */
     public ManagerDialog() {
         super();
         initComponents();
-        
+
         setIconImage(Application.getPosWindow().getIconImage());
         setTitle(Application.getTitle() + ": Manager Functions");
-        
+
         glassPane = new GlassPane();
 		setGlassPane(glassPane);
     }
-    
+
     public void setGlassPaneVisible(boolean b) {
 		glassPane.setVisible(b);
 	}
-    
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -192,7 +188,34 @@ public class ManagerDialog extends JFrame {
     }//GEN-LAST:event_btnOpenTicketsActionPerformed
 
     private void btnDrawerPullReportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCashDrawerReportActionPerformed
-    	showDrawerPullReport();
+
+        try {
+            setGlassPaneVisible(true);
+
+            Terminal terminal = Application.getInstance().getTerminal();
+
+            NumberSelectionDialog dialog = new NumberSelectionDialog();
+            dialog.setTitle(com.floreantpos.POSConstants.BEGIN_CASH);
+            dialog.setDecimalAllowed(true);
+            dialog.setValue(terminal.getOpeningBalance());
+            dialog.open();
+
+            if (!dialog.isCanceled()) {
+                double beginCash = dialog.getValue();
+                terminal.setOpeningBalance(dialog.getValue());
+
+                TerminalDAO terminalDAO = new TerminalDAO();
+                terminalDAO.saveOrUpdate(terminal);
+            }
+
+        } catch (Exception e) {
+            POSMessageDialog.showError("Error al establecer valor inicial de Caja", e);
+        } finally {
+            setGlassPaneVisible(false);
+        }
+
+        showDrawerPullReport();
+
     }//GEN-LAST:event_btnCashDrawerReportActionPerformed
 
 	private void showDrawerPullReport() {
@@ -220,19 +243,19 @@ public class ManagerDialog extends JFrame {
 	}
 
     private void doShowServerTips(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetDrawerActionPerformed
-    	
+
     	Job job = new Job() {
 			@Override
 			public Object run() {
 				try {
 					setGlassPaneVisible(true);
-					
+
 					JPanel panel = new JPanel(new MigLayout());
 					List<User> users = UserDAO.getInstance().findAll();
-					
+
 					JXDatePicker fromDatePicker = new JXDatePicker();
 					JXDatePicker toDatePicker = new JXDatePicker();
-					
+
 					panel.add(new JLabel(com.floreantpos.POSConstants.SELECT_USER + ":"), "grow");
 					JComboBox userCombo = new JComboBox(new ListComboBoxModel(users));
 					panel.add(userCombo, "grow, wrap");
@@ -240,17 +263,17 @@ public class ManagerDialog extends JFrame {
 					panel.add(fromDatePicker,"wrap");
 					panel.add(new JLabel(com.floreantpos.POSConstants.TO_), "grow");
 					panel.add(toDatePicker);
-					
+
 					int option = JOptionPane.showOptionDialog(ManagerDialog.this, panel, com.floreantpos.POSConstants.SELECT_CRIETERIA, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
 					if(option != JOptionPane.OK_OPTION) {
 						return null;
 					}
-					
-					
-					
+
+
+
 					GratuityDAO gratuityDAO = new GratuityDAO();
 					TipsCashoutReport report = gratuityDAO.createReport(fromDatePicker.getDate(), toDatePicker.getDate(), (User) userCombo.getSelectedItem());
-					
+
 					TipsCashoutReportDialog dialog = new TipsCashoutReportDialog(report, ManagerDialog.this, true);
 					dialog.setSize(400, 600);
 					dialog.open();
@@ -264,23 +287,23 @@ public class ManagerDialog extends JFrame {
     	};
     	Worker.post(job);
     }//GEN-LAST:event_btnResetDrawerActionPerformed
-    
+
     public void open() {
     	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    	
+
     	int width = 800;
     	int height = 600;
-    	
-    	int x = (screenSize.width - 800) / 2; 
-    	int y = (screenSize.height - 600) / 2; 
-    	
+
+    	int x = (screenSize.width - 800) / 2;
+    	int y = (screenSize.height - 600) / 2;
+
     	setSize(width, height);
-		
+
 		setLocation(x, y);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setVisible(true);
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.floreantpos.swing.PosButton btnDrawerPullReport;
     private com.floreantpos.swing.PosButton btnCashDrops;
@@ -293,5 +316,5 @@ public class ManagerDialog extends JFrame {
     private com.floreantpos.swing.TransparentPanel transparentPanel3;
     private com.floreantpos.swing.TransparentPanel transparentPanel4;
     // End of variables declaration//GEN-END:variables
-    
+
 }

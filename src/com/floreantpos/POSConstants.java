@@ -316,6 +316,7 @@ public class POSConstants {
     public static final String PRINT_TO_BAR_WHEN_TICKET_SETTLED = Messages.getString("PosMessage.315"); //$NON-NLS-1$
     public static final String BAR_PRINTER = Messages.getString("PosMessage.316"); //$NON-NLS-1$
     public static final String KITCHEN_PRINTER = Messages.getString("PosMessage.317"); //$NON-NLS-1$
+    public static final String BEGIN_CASH = Messages.getString("PosMessage.318"); //$NON-NLS-1$
 	public static final String WELCOME = Messages.getString("Switchboard.0"); //$NON-NLS-1$
 	public static final String OPEN_TICKETS_AND_ACTIVITY = Messages.getString("Switchboard.1"); //$NON-NLS-1$
 	public static final String TICKETS = Messages.getString("Switchboard.2"); //$NON-NLS-1$

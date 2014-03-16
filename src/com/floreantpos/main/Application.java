@@ -133,8 +133,8 @@ public class Application {
 			if (terminal2 == null) {
 				terminal2 = new Terminal();
 				terminal2.setId(terminalId);
-				terminal2.setOpeningBalance(new Double(500));
-				terminal2.setCurrentBalance(new Double(500));
+                terminal2.setOpeningBalance(new Double(0));
+                terminal2.setCurrentBalance(new Double(0));
 				terminal2.setName(com.floreantpos.POSConstants.TERMINAL + " - " + terminalId);
 				terminalDAO.saveOrUpdate(terminal2);
 			}
