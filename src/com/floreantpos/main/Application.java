@@ -57,9 +57,9 @@ public class Application {
 
 	private static Application instance;
 
-	private static DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy");
-	private static ImageIcon applicationIcon;
+    private static final DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private static ImageIcon applicationIcon;
 
 	public final static String VERSION = "1.0_2";
 

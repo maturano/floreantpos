@@ -13,7 +13,6 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 import net.sf.jasperreports.engine.print.JRPrinterAWT;
 import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.view.JasperViewer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,104 +28,103 @@ import com.floreantpos.model.dao.RestaurantDAO;
 public class JReportPrintService {
 	private static Log logger = LogFactory.getLog(JReportPrintService.class);
 
-	public static void printTicket(Ticket ticket) {
-		Restaurant restaurant = RestaurantDAO.getInstance().get(Integer.valueOf(1));
+    public static void printTicket(Ticket ticket) {
+        Restaurant restaurant = RestaurantDAO.getInstance().get(Integer.valueOf(1));
 
-		HashMap map = new HashMap();
-		map.put("headerLine1", restaurant.getName());
-		map.put("headerLine2", restaurant.getAddressLine1());
-		map.put("headerLine3", restaurant.getAddressLine2());
-		map.put("headerLine4", restaurant.getAddressLine3());
-		map.put("headerLine5", com.floreantpos.POSConstants.TEL + ": " + restaurant.getTelephone());
+        HashMap map = new HashMap();
+        map.put("restaurantName", restaurant.getName());
+        map.put("addressLine1",   restaurant.getAddressLine1());
+        map.put("addressLine2",   restaurant.getAddressLine2());
+        map.put("addressLine3",   restaurant.getAddressLine3());
+        map.put("telephone",      com.floreantpos.POSConstants.TEL + ": " + restaurant.getTelephone());
 
-		map.put("checkNo", com.floreantpos.POSConstants.CHK_NO + ticket.getId());
-		map.put("tableNo", com.floreantpos.POSConstants.TABLE_NO + ticket.getTableNumber());
-		map.put("guestCount", com.floreantpos.POSConstants.GUESTS_ + ticket.getNumberOfGuests());
-		map.put("serverName", com.floreantpos.POSConstants.SERVER + ": " + ticket.getOwner());
-		map.put("reportDate", com.floreantpos.POSConstants.DATE + ": " + Application.formatDate(new Date()));
-		map.put("grandSubtotal", Application.formatNumber(ticket.getSubtotalAmount()));
-		map.put("grandTotal", Application.formatNumber(ticket.getTotalAmount()));
-		map.put("taxAmount", Application.formatNumber(ticket.getTaxAmount()));
-		if (ticket.getGratuity() != null) {
-			map.put("tipAmount", Application.formatNumber(ticket.getGratuity().getAmount()));
-		}
+        map.put("checkNo",       com.floreantpos.POSConstants.CHK_NO + ticket.getId());
+        map.put("tableNo",       com.floreantpos.POSConstants.TABLE_NO + ticket.getTableNumber());
+        map.put("guestCount",    com.floreantpos.POSConstants.GUESTS_ + ticket.getNumberOfGuests());
+        map.put("serverName",    com.floreantpos.POSConstants.SERVER + ": " + ticket.getOwner());
+        map.put("reportDate",    com.floreantpos.POSConstants.DATE + ": " + Application.formatDate(new Date()));
+        map.put("grandSubtotal", Application.formatNumber(ticket.getSubtotalAmount()));
+        map.put("grandTotal",    Application.formatNumber(ticket.getTotalAmount()));
+        map.put("taxAmount",     Application.formatNumber(ticket.getTaxAmount()));
+        if (ticket.getGratuity() != null) {
+            map.put("tipAmount", Application.formatNumber(ticket.getGratuity().getAmount()));
+        }
 
-		InputStream ticketReportStream = null;
+        InputStream ticketReportStream = null;
 
-		try {
-			//ticketReportStream = JReportPrintService.class.getResourceAsStream("/com/floreantpos/jreports/TicketReceiptReport.jrxml");
-			ticketReportStream = JReportPrintService.class.getResourceAsStream("/com/floreantpos/jreports/TicketReceiptReport.jasper");
+        try {
+            ticketReportStream = JReportPrintService.class.getResourceAsStream("/com/floreantpos/jreports/TicketReceiptReport.jasper");
 
-			//JasperReport ticketReport = JasperCompileManager.compileReport(ticketReportStream);
-			JasperReport ticketReport = (JasperReport) JRLoader.loadObject(ticketReportStream);
+            JasperReport ticketReport = (JasperReport) JRLoader.loadObject(ticketReportStream);
 
-			JasperPrint jasperPrint = JasperFillManager.fillReport(ticketReport, map, new JRTableModelDataSource(new TicketDataSource(ticket)));
-			JasperPrintManager.printReport(jasperPrint, false);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(ticketReport, map, new JRTableModelDataSource(new TicketDataSource(ticket)));
+            JasperPrintManager.printReport(jasperPrint, false);
 
-		} catch (JRException e) {
-			logger.error(com.floreantpos.POSConstants.PRINT_ERROR, e);
-		} finally {
-			try {
-				ticketReportStream.close();
-			} catch (Exception x) {
-			}
-		}
-	}
+        } catch (JRException e) {
+            logger.error(com.floreantpos.POSConstants.PRINT_ERROR, e);
 
-	public static void printTicketToKitchen(Ticket ticket) {
-		Restaurant restaurant = RestaurantDAO.getInstance().get(Integer.valueOf(1));
+        } finally {
+            try {
+                ticketReportStream.close();
+            } catch (Exception x) {
+            }
+        }
+}
 
-		HashMap map = new HashMap();
-		map.put("headerLine1", restaurant.getName());
+    public static void printTicketToKitchen(Ticket ticket) {
+        Restaurant restaurant = RestaurantDAO.getInstance().get(Integer.valueOf(1));
 
-		map.put("checkNo", com.floreantpos.POSConstants.CHK_NO + ticket.getId());
-		map.put("tableNo", com.floreantpos.POSConstants.TABLE_NO + ticket.getTableNumber());
-		map.put("guestCount", com.floreantpos.POSConstants.GUESTS_ + ticket.getNumberOfGuests());
-		map.put("serverName", com.floreantpos.POSConstants.SERVER + ": " + ticket.getOwner());
-		map.put("reportDate", com.floreantpos.POSConstants.DATE + ": " + Application.formatDate(new Date()));
+        HashMap map = new HashMap();
 
-		InputStream ticketReportStream = null;
+        map.put("restaurantName", restaurant.getName());
+        map.put("checkNo",        com.floreantpos.POSConstants.CHK_NO + ticket.getId());
+        map.put("tableNo",        com.floreantpos.POSConstants.TABLE_NO + ticket.getTableNumber());
+        map.put("guestCount",     com.floreantpos.POSConstants.GUESTS_ + ticket.getNumberOfGuests());
+        map.put("serverName",     com.floreantpos.POSConstants.SERVER + ": " + ticket.getOwner());
+        map.put("reportDate",     com.floreantpos.POSConstants.DATE + ": " + Application.formatDate(new Date()));
 
-		try {
-			ticketReportStream = JReportPrintService.class.getResourceAsStream("/com/floreantpos/jreports/KitchenReceipt.jasper");
-			JasperReport ticketReport = (JasperReport) JRLoader.loadObject(ticketReportStream);
+        InputStream ticketReportStream = null;
 
-			JasperPrint jasperPrint = JasperFillManager.fillReport(ticketReport, map, new JRTableModelDataSource(new KitchenTicketDataSource(ticket)));
+        try {
+            ticketReportStream = JReportPrintService.class.getResourceAsStream("/com/floreantpos/jreports/KitchenReceipt.jasper");
+            JasperReport ticketReport = (JasperReport) JRLoader.loadObject(ticketReportStream);
 
-			JRPrinterAWT.printToKitchen = true;
-			JasperPrintManager.printReport(jasperPrint, false);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(ticketReport, map, new JRTableModelDataSource(new KitchenTicketDataSource(ticket)));
 
-			//no exception, so print to kitchen successful.
-			//now mark items as printed.
-			markItemsAsPrinted(ticket);
+            JRPrinterAWT.printToKitchen = true;
+            JasperPrintManager.printReport(jasperPrint, false);
 
-		} catch (JRException e) {
-			logger.error(com.floreantpos.POSConstants.PRINT_ERROR, e);
-		} finally {
-			try {
-				ticketReportStream.close();
-			} catch (Exception x) {
-			}
-		}
-	}
+            //no exception, so print to kitchen successful.
+            //now mark items as printed.
+            markItemsAsPrinted(ticket);
+
+        } catch (JRException e) {
+            logger.error(com.floreantpos.POSConstants.PRINT_ERROR, e);
+
+        } finally {
+            try {
+                ticketReportStream.close();
+            } catch (Exception x) {
+            }
+        }
+    }
 
     public static void printTicketToBar(Ticket ticket) {
         Restaurant restaurant = RestaurantDAO.getInstance().get(Integer.valueOf(1));
 
         HashMap map = new HashMap();
 
-        map.put("headerLine1", restaurant.getName());
-
-        map.put("checkNo",    com.floreantpos.POSConstants.CHK_NO   + ticket.getId());
-        map.put("tableNo",    com.floreantpos.POSConstants.TABLE_NO + ticket.getTableNumber());
-        map.put("guestCount", com.floreantpos.POSConstants.GUESTS_  + ticket.getNumberOfGuests());
-        map.put("serverName", com.floreantpos.POSConstants.SERVER   + ": " + ticket.getOwner());
-        map.put("reportDate", com.floreantpos.POSConstants.DATE     + ": " + Application.formatDate(new Date()));
+        map.put("restaurantName", restaurant.getName());
+        map.put("checkNo",        com.floreantpos.POSConstants.CHK_NO   + ticket.getId());
+        map.put("tableNo",        com.floreantpos.POSConstants.TABLE_NO + ticket.getTableNumber());
+        map.put("guestCount",     com.floreantpos.POSConstants.GUESTS_  + ticket.getNumberOfGuests());
+        map.put("serverName",     com.floreantpos.POSConstants.SERVER   + ": " + ticket.getOwner());
+        map.put("reportDate",     com.floreantpos.POSConstants.DATE     + ": " + Application.formatDate(new Date()));
 
         InputStream ticketReportStream = null;
 
         try {
-            ticketReportStream        = JReportPrintService.class.getResourceAsStream("/com/floreantpos/jreports/KitchenReceipt.jasper");
+            ticketReportStream = JReportPrintService.class.getResourceAsStream("/com/floreantpos/jreports/BarReceipt.jasper");
             JasperReport ticketReport = (JasperReport) JRLoader.loadObject(ticketReportStream);
             JasperPrint jasperPrint   = JasperFillManager.fillReport(ticketReport, map, new JRTableModelDataSource(new BarTicketDataSource(ticket)));
 

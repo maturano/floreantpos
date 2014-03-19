@@ -11,7 +11,6 @@ import com.floreantpos.POSConstants;
 import com.floreantpos.main.Application;
 import com.floreantpos.model.PosTransaction;
 import com.floreantpos.model.Ticket;
-import com.floreantpos.print.PosPrintService;
 import com.floreantpos.services.PosTransactionService;
 import com.floreantpos.swing.MessageDialog;
 import com.floreantpos.ui.dialog.POSMessageDialog;

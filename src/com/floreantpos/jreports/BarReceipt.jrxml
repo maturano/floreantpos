@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TicketReceiptReport" pageWidth="226" pageHeight="232" columnWidth="226" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
-	<property name="ireport.zoom" value="4.0"/>
+	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
@@ -24,33 +24,11 @@
 	<parameter name="grandTotal" class="java.lang.String" isForPrompting="false"/>
 	<field name="itemNo" class="java.lang.String"/>
 	<field name="itemName" class="java.lang.String"/>
-	<field name="itemUnitPrice" class="java.lang.String"/>
 	<field name="itemQty" class="java.lang.String"/>
-	<field name="itemSubtotal" class="java.lang.String"/>
 	<title>
-		<band height="90" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="20" width="204" height="16" isRemoveLineWhenBlank="true"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{addressLine1}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="0" y="36" width="204" height="16" isRemoveLineWhenBlank="true"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{addressLine2}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="0" y="52" width="204" height="16" isRemoveLineWhenBlank="true"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{addressLine3}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="0" y="68" width="204" height="16" isRemoveLineWhenBlank="true"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{telephone}]]></textFieldExpression>
-			</textField>
+		<band height="40" splitType="Stretch">
 			<line>
-				<reportElement x="0" y="86" width="204" height="1"/>
+				<reportElement x="0" y="19" width="204" height="1"/>
 			</line>
 			<textField>
 				<reportElement x="0" y="0" width="204" height="20"/>
@@ -59,12 +37,17 @@
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{restaurantName}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="204" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[*** ORDEN PARA BAR ***]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>
 		<band height="48" splitType="Stretch">
 			<textField>
-				<reportElement style="header" x="0" y="32" width="226" height="16"/>
+				<reportElement style="header" x="0" y="32" width="204" height="16"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{serverName}]]></textFieldExpression>
 			</textField>
@@ -103,50 +86,25 @@
 	<detail>
 		<band height="16">
 			<textField>
-				<reportElement x="0" y="0" width="20" height="16"/>
-				<textElement textAlignment="Center"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{itemQty}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="20" y="0" width="124" height="16"/>
+				<reportElement x="30" y="0" width="154" height="16"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{itemName}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="144" y="0" width="60" height="16"/>
-				<textElement textAlignment="Right"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{itemSubtotal}]]></textFieldExpression>
+				<reportElement x="184" y="0" width="20" height="16"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{itemNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="30" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{itemQty}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band height="20" splitType="Stretch">
-			<line>
-				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="204" height="1"/>
-				<graphicElement>
-					<pen lineWidth="0.5" lineColor="#999999"/>
-				</graphicElement>
-			</line>
-			<staticText>
-				<reportElement x="64" y="0" width="80" height="16"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<text><![CDATA[TOTAL:]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="144" y="0" width="60" height="16"/>
-				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.String"><![CDATA[$P{grandTotal}]]></textFieldExpression>
-			</textField>
-		</band>
-	</columnFooter>
 	<pageFooter>
-		<band height="40" splitType="Stretch">
-			<staticText>
-				<reportElement x="0" y="0" width="204" height="40"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[GRACIAS POR SU VISITA
-REGRESE PRONTO]]></text>
-			</staticText>
-		</band>
+		<band height="40" splitType="Stretch"/>
 	</pageFooter>
 </jasperReport>
