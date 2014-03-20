@@ -19,10 +19,12 @@ import org.apache.commons.logging.LogFactory;
 
 import com.floreantpos.main.Application;
 import com.floreantpos.model.Restaurant;
+import com.floreantpos.model.Terminal;
 import com.floreantpos.model.Ticket;
 import com.floreantpos.model.TicketItem;
 import com.floreantpos.model.TicketItemModifier;
 import com.floreantpos.model.TicketItemModifierGroup;
+import com.floreantpos.model.DrawerPullReport;
 import com.floreantpos.model.dao.RestaurantDAO;
 
 public class JReportPrintService {
@@ -169,4 +171,65 @@ public class JReportPrintService {
 			}
 		}
 	}
+
+    public static void printDrawerPullReport(DrawerPullReport drawerPullReport, Terminal terminal) {
+
+        Restaurant restaurant = RestaurantDAO.getInstance().get(Integer.valueOf(1));
+
+        HashMap map = new HashMap();
+
+        map.put("restaurantName",           restaurant.getName());
+        map.put("reportDate",               Application.formatDate(new Date()));
+        map.put("cashReceiptNumber",        drawerPullReport.getCashReceiptNumber().toString());
+        map.put("netSales",                 Application.formatNumber(drawerPullReport.getNetSales()));
+        map.put("salesTax",                 Application.formatNumber(drawerPullReport.getSalesTax()));
+        map.put("totalRevenue",             Application.formatNumber(drawerPullReport.getTotalRevenue()));
+        map.put("chargedTips",              Application.formatNumber(drawerPullReport.getChargedTips()));
+        map.put("grossReceipts",            Application.formatNumber(drawerPullReport.getGrossReceipts()));
+        map.put("getCashReceiptNumber",     drawerPullReport.getCashReceiptNumber().toString());
+        map.put("cashReceiptAmount",        Application.formatNumber(drawerPullReport.getCashReceiptAmount()));
+        map.put("creditCardReceiptNumber",  drawerPullReport.getCreditCardReceiptNumber().toString());
+        map.put("creditCardReceiptAmount",  Application.formatNumber(drawerPullReport.getCreditCardReceiptAmount()));
+        map.put("debitCardReceiptNumber",   drawerPullReport.getDebitCardReceiptNumber().toString());
+        map.put("debitCardReceiptAmount",   Application.formatNumber(drawerPullReport.getDebitCardReceiptAmount()));
+        map.put("giftCertReturnNumber",     drawerPullReport.getGiftCertReturnCount().toString());
+        map.put("giftCertReturnAmount",     Application.formatNumber(drawerPullReport.getGiftCertReturnAmount()));
+        map.put("giftCertChangeAmount",     Application.formatNumber(drawerPullReport.getGiftCertChangeAmount()));
+        map.put("cashBack",                 Application.formatNumber(drawerPullReport.getCashBack()));
+        map.put("receiptDifferential",      Application.formatNumber(drawerPullReport.getReceiptDifferential()));
+        map.put("chargedTips",              Application.formatNumber(drawerPullReport.getChargedTips()));
+        map.put("tipsPaid",                 Application.formatNumber(drawerPullReport.getTipsPaid()));
+        map.put("tipsDifferential",         Application.formatNumber(drawerPullReport.getTipsDifferential()));
+        map.put("cashReceiptNumber",        drawerPullReport.getCashReceiptNumber().toString());
+        map.put("cashReceiptAmount",        Application.formatNumber(drawerPullReport.getCashReceiptAmount()));
+        map.put("tipsPaid",                 Application.formatNumber(drawerPullReport.getTipsPaid()));
+        map.put("payOutNumber",             drawerPullReport.getPayOutNumber().toString());
+        map.put("payOutAmount",             Application.formatNumber(drawerPullReport.getPayOutAmount()));
+        map.put("cashBack",                 Application.formatNumber(drawerPullReport.getCashBack()));
+        map.put("openingBalance",           Application.formatNumber(terminal.getOpeningBalance()));
+        map.put("drawerBleedNumber",        drawerPullReport.getDrawerBleedNumber().toString());
+        map.put("drawerBleedAmount",        Application.formatNumber(drawerPullReport.getDrawerBleedAmount()));
+        map.put("drawerAccountable",        Application.formatNumber(drawerPullReport.getDrawerAccountable()));
+        map.put("currentBalance",           Application.formatNumber(terminal.getCurrentBalance()));
+
+        InputStream drawerReportStream = null;
+
+        try {
+            drawerReportStream = JReportPrintService.class.getResourceAsStream("/com/floreantpos/jreports/DrawerPullReport.jasper");
+
+            JasperReport drawerReport = (JasperReport) JRLoader.loadObject(drawerReportStream);
+
+            JasperPrint jasperPrint = JasperFillManager.fillReport(drawerReport, map);
+            JasperPrintManager.printReport(jasperPrint, false);
+
+        } catch (JRException e) {
+            logger.error(com.floreantpos.POSConstants.PRINT_ERROR, e);
+
+        } finally {
+            try {
+                drawerReportStream.close();
+            } catch (Exception x) {
+            }
+        }
+    }
 }

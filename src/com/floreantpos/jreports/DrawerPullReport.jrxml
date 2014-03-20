@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="DrawerPullReport" columnCount="3" pageWidth="226" pageHeight="841" whenNoDataType="AllSectionsNoDetail" columnWidth="75" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="432"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<style name="element" isDefault="true" hAlign="Left" vAlign="Top" fontSize="8" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+	<parameter name="cashReceiptNumber" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="netSales" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="salesTax" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="totalRevenue" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="chargedTips" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="grossReceipts" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="cashReceiptAmount" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="creditCardReceiptNumber" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="creditCardReceiptAmount" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="debitCardReceiptNumber" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="debitCardReceiptAmount" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="giftCertReturnNumber" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="giftCertReturnAmount" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="giftCertChangeAmount" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="cashBack" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="receiptDifferential" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="tipsPaid" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="payOutNumber" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="payOutAmount" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="openingBalance" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="drawerBleedNumber" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="drawerBleedAmount" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="drawerAccountable" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="currentBalance" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="tipsDifferential" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="restaurantName" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="reportDate" class="java.lang.String" isForPrompting="false"/>
+	<pageHeader>
+		<band height="548">
+			<staticText>
+				<reportElement x="0" y="35" width="204" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[CORTE DE CAJA]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="30" width="226" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Double"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="0" y="56" width="226" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Double"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="0" y="62" width="42" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[FECHA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="92" width="204" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[BALANCE DE VENTAS]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="108" width="226" height="1"/>
+			</line>
+			<staticText>
+				<reportElement style="element" x="0" y="109" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[   VENTAS NETAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="125" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[+ IMPUESTOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="141" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[= TOTAL INGRESOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="157" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[+ PROPINAS RECIBIDAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="174" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[= INGRESOS BRUTOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="206" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[- INGRESOS EN EFECTIVO  (      )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="222" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[- TARJETAS DE CREDITO  (      )]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="173" width="226" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="element" x="0" y="238" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[- TARJETAS DE DEBITO  (      )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="254" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[+ GIFT RETURNS  (      )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="270" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[+ GIFT CERT. CHANGE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="286" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[+ DEVOLUCIONES EN EFECTIVO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="303" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[= DIFERENCIA EN INGRESOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="335" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[+ PROPINAS RECIBIDAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="351" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[- PROPINAS PAGADAS]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="302" width="226" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="element" x="0" y="368" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[= ADEUDO EN PROPINAS]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="367" width="226" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement style="element" x="0" y="404" width="204" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[BALANCE DE CAJA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="421" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[   EFECTIVO  (      )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="437" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[- PROPINAS PAGADAS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="453" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[- PAY OUT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="469" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[- CASH BACK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="485" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[+ FONDO DE CAJA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="element" x="0" y="501" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[- RETIROS DE CAJA  (      )]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="420" width="226" height="1"/>
+			</line>
+			<staticText>
+				<reportElement style="element" x="0" y="518" width="170" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[= SALDO EN CAJA]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="517" width="226" height="1"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="104" y="206" width="30" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{cashReceiptNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="109" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{netSales}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="125" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{salesTax}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="141" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{totalRevenue}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="157" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{chargedTips}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="174" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{grossReceipts}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="206" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{cashReceiptAmount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="222" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{creditCardReceiptAmount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="238" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{debitCardReceiptAmount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="270" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{giftCertChangeAmount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="286" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{cashBack}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="303" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{receiptDifferential}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="351" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{tipsPaid}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="335" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{chargedTips}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="368" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{tipsDifferential}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="421" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{cashReceiptAmount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="437" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{tipsPaid}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="453" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{payOutAmount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="469" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{cashBack}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="485" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{openingBalance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="501" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{drawerBleedAmount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="518" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{drawerAccountable}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="204" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{restaurantName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="42" y="62" width="162" height="16"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{reportDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="97" y="222" width="30" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{creditCardReceiptNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="91" y="238" width="30" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{debitCardReceiptNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="69" y="254" width="30" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{giftCertReturnNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="48" y="421" width="30" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{cashReceiptNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="77" y="501" width="30" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{drawerBleedNumber}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="254" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{giftCertReturnAmount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+</jasperReport>
