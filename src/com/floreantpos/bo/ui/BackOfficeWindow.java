@@ -1,9 +1,3 @@
-/*
- * BackOfficeWindow.java
- *
- * Created on August 16, 2006, 12:43 PM
- */
-
 package com.floreantpos.bo.ui;
 
 import java.awt.Dimension;
@@ -38,19 +32,11 @@ import com.floreantpos.main.Application;
 import com.floreantpos.model.User;
 import com.floreantpos.model.UserPermission;
 import com.floreantpos.model.UserType;
-import com.floreantpos.ui.report.actions.CreditCardReportAction;
 import com.floreantpos.ui.report.actions.HourlyLaborReportAction;
-import com.floreantpos.ui.report.actions.JournalReportAction;
-import com.floreantpos.ui.report.actions.KeyStatisticsSalesReportAction;
-import com.floreantpos.ui.report.actions.MenuUsageReportAction;
 import com.floreantpos.ui.report.actions.OpenTicketSummaryReportAction;
-import com.floreantpos.ui.report.actions.PayrollReportAction;
-import com.floreantpos.ui.report.actions.SalesAnalysisReportAction;
 import com.floreantpos.ui.report.actions.SalesBalanceReportAction;
 import com.floreantpos.ui.report.actions.SalesDetailReportAction;
-import com.floreantpos.ui.report.actions.SalesExceptionReportAction;
 import com.floreantpos.ui.report.actions.SalesReportAction;
-import com.floreantpos.ui.report.actions.ServerProductivityReportAction;
 
 /**
  *
@@ -133,15 +119,16 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		reportMenu.add(new SalesReportAction());
 		reportMenu.add(new OpenTicketSummaryReportAction());
 		reportMenu.add(new HourlyLaborReportAction());
-		reportMenu.add(new PayrollReportAction());
-		reportMenu.add(new KeyStatisticsSalesReportAction());
-		reportMenu.add(new SalesAnalysisReportAction());
-		reportMenu.add(new CreditCardReportAction());
-		reportMenu.add(new MenuUsageReportAction());
-		reportMenu.add(new ServerProductivityReportAction());
-		reportMenu.add(new JournalReportAction());
+        // TODO
+        //reportMenu.add(new PayrollReportAction());
+        //reportMenu.add(new KeyStatisticsSalesReportAction());
+        //reportMenu.add(new SalesAnalysisReportAction());
+        //reportMenu.add(new CreditCardReportAction());
+        //reportMenu.add(new MenuUsageReportAction());
+        //reportMenu.add(new ServerProductivityReportAction());
+        //reportMenu.add(new JournalReportAction());
 		reportMenu.add(new SalesBalanceReportAction());
-		reportMenu.add(new SalesExceptionReportAction());
+        //reportMenu.add(new SalesExceptionReportAction());
 		reportMenu.add(new SalesDetailReportAction());
 		menuBar.add(reportMenu);
 	}
@@ -189,7 +176,7 @@ public class BackOfficeWindow extends javax.swing.JFrame {
 		getContentPane().add(jPanel1, java.awt.BorderLayout.CENTER);
 
 		pack();
-	}// </editor-fold>//GEN-END:initComponents
+	}// </editor-fold>
 
 	/**
 	 * @param args the command line arguments
