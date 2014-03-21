@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TicketReceiptReport" pageWidth="226" pageHeight="232" columnWidth="226" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isFloatColumnFooter="true" isIgnorePagination="true">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TicketReceiptReport" pageWidth="226" pageHeight="283" columnWidth="226" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isFloatColumnFooter="true" isIgnorePagination="true">
 	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="86"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -22,6 +22,10 @@
 	<parameter name="taxAmount" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="tipAmount" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="grandTotal" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="transactionType" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="tipOrChange" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="transactionAmount" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="tipOrChangeAmount" class="java.lang.String" isForPrompting="false"/>
 	<field name="itemName" class="java.lang.String"/>
 	<field name="itemUnitPrice" class="java.lang.String"/>
 	<field name="itemQty" class="java.lang.String"/>
@@ -119,7 +123,7 @@
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="20" splitType="Stretch">
+		<band height="95" splitType="Stretch">
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="204" height="1"/>
 				<graphicElement>
@@ -135,6 +139,26 @@
 				<reportElement x="144" y="0" width="60" height="16"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{grandTotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="20" y="32" width="124" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{transactionType}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="64" y="48" width="80" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{tipOrChange}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="32" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{transactionAmount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="144" y="48" width="60" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{tipOrChangeAmount}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnFooter>

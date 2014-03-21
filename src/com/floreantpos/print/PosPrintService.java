@@ -187,7 +187,11 @@ public class PosPrintService {
 		printer.printText(text);
 	}
 
-	public static void printTicket(final Ticket ticket) throws Exception {
+    public static void printTicket(final Ticket ticket) throws Exception {
+        printTicket(ticket, 0); // TODO: Averiguar otra solición
+    }
+
+	public static void printTicket(final Ticket ticket, final double tenderedAmount) throws Exception {
 		Job job = new Job() {
 
 			@Override
@@ -195,7 +199,7 @@ public class PosPrintService {
 				PosPrinter posPrinter = null;
 				try {
 					if(PrintConfig.getReceiptPrinterType() == PrinterType.OS_PRINTER) {
-						JReportPrintService.printTicket(ticket);
+                        JReportPrintService.printTicket(ticket, tenderedAmount);
 						return null;
 					}
 

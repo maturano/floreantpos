@@ -31,6 +31,10 @@ public class JReportPrintService {
 	private static Log logger = LogFactory.getLog(JReportPrintService.class);
 
     public static void printTicket(Ticket ticket) {
+        printTicket(ticket, 0);
+    }
+
+    public static void printTicket(Ticket ticket, double tenderedAmount) {
         Restaurant restaurant = RestaurantDAO.getInstance().get(Integer.valueOf(1));
 
         HashMap map = new HashMap();
@@ -48,9 +52,32 @@ public class JReportPrintService {
         map.put("grandSubtotal", Application.formatNumber(ticket.getSubtotalAmount()));
         map.put("grandTotal",    Application.formatNumber(ticket.getTotalAmount()));
         map.put("taxAmount",     Application.formatNumber(ticket.getTaxAmount()));
-        if (ticket.getGratuity() != null) {
-            map.put("tipAmount", Application.formatNumber(ticket.getGratuity().getAmount()));
+
+        String transactionType = "", transactionAmount = "", tipOrChange = "", tipOrChangeAmount = "";
+        if (ticket.getTransactionType() != null) {
+            switch (ticket.getTransactionType()) {
+                case "CASH":
+                    transactionType   = "EFECTIVO:";
+                    tipOrChange       = "CAMBIO:";
+                    transactionAmount = Application.formatNumber(tenderedAmount);
+                    tipOrChangeAmount = Application.formatNumber(tenderedAmount -ticket.getTotalAmount());
+                    break;
+
+                case "CREDIT_CARD":
+                case "DEBIT_CARD":
+                    transactionType   = "CARGO A TARJETA:";
+                    tipOrChange       = "PROPINA:";
+                    transactionAmount = Application.formatNumber(ticket.getTotalAmount() + ticket.getGratuity().getAmount());
+                    tipOrChangeAmount = Application.formatNumber(ticket.getGratuity().getAmount());
+                    break;
+            }
         }
+
+        map.put("transactionType",   transactionType);
+        map.put("transactionAmount", transactionAmount);
+        map.put("tipOrChange",       tipOrChange);
+        map.put("tipOrChangeAmount", tipOrChangeAmount);
+
 
         InputStream ticketReportStream = null;
 
