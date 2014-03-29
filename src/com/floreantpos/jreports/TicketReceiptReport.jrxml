@@ -68,27 +68,37 @@
 		<band height="48" splitType="Stretch">
 			<textField>
 				<reportElement style="header" x="0" y="32" width="226" height="16"/>
-				<textElement/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{serverName}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="header" x="0" y="16" width="86" height="16"/>
-				<textElement/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{guestCount}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
 				<reportElement style="header" x="88" y="16" width="116" height="16"/>
-				<textElement/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{reportDate}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="header" x="0" y="0" width="86" height="16"/>
-				<textElement/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{checkNo}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement style="header" x="88" y="0" width="116" height="16"/>
-				<textElement/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$P{tableNo}]]></textFieldExpression>
 			</textField>
 		</band>
