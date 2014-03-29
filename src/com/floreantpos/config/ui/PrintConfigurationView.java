@@ -72,6 +72,11 @@ public class PrintConfigurationView extends ConfigurationView {
 
 	private void setSelectedPrinter(JComboBox whichPrinter, String propertyName) {
 		PrintService osDefaultPrinter = PrintServiceLookup.lookupDefaultPrintService();
+
+        if (osDefaultPrinter == null) {
+            return;
+        }
+
 		String receiptPrinterName = ApplicationConfig.getString(propertyName, osDefaultPrinter.getName());
 
 		int printerCount = whichPrinter.getItemCount();
@@ -89,6 +94,7 @@ public class PrintConfigurationView extends ConfigurationView {
 		ApplicationConfig.put(PrintConfig.P_RECEIPT_PRINTER_TYPE, cbReceiptPrinterType.getSelectedItem().toString());
 		ApplicationConfig.put(PrintConfig.P_KITCHEN_PRINTER_TYPE, cbKitchenPrinterType.getSelectedItem().toString());
         ApplicationConfig.put(PrintConfig.P_BAR_PRINTER_TYPE, cbBarPrinterType.getSelectedItem().toString());
+
 
 		PrintService printService = (PrintService) cbReceiptPrinterName.getSelectedItem();
 		ApplicationConfig.put(PrintConfig.P_OS_PRINTER_FOR_RECEIPT, printService == null ? null : printService.getName());
@@ -489,13 +495,24 @@ public class PrintConfigurationView extends ConfigurationView {
     // End of variables declaration//GEN-END:variables
 
     private class PrintServiceComboRenderer extends DefaultListCellRenderer {
-	@Override
-	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-		JLabel listCellRendererComponent = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-		listCellRendererComponent.setText(((PrintService) value).getName());
+        @Override
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            JLabel listCellRendererComponent = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
-		return listCellRendererComponent;
-	}
+            String printName = "";
+            try {
+                printName = ((PrintService) value).getName();
+
+            } catch (java.lang.NullPointerException e) {
+                printName = (String) value;
+
+            } catch (java.lang.ClassCastException e) {
+                printName = (String) value;
+
+            } finally {
+                listCellRendererComponent.setText(printName);
+                return listCellRendererComponent;
+            }
+        }
     }
-
 }
